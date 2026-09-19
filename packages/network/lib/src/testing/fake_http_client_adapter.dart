@@ -34,8 +34,16 @@ class FakeHttpClientAdapter implements HttpClientAdapter {
   final List<_Route> _routes = [];
 
   /// Answers every matching request with [handler]. Later routes win.
-  void on(String method, String path, FakeHandler handler) {
-    _routes.add(_Route(method.toUpperCase(), path, handler));
+  void on(String method, String path, FakeHandler handler) =>
+      onMatching(method, (candidate) => candidate == path, handler);
+
+  /// Like [on], for paths that are matched by a predicate (e.g. `/products/7`).
+  void onMatching(
+    String method,
+    bool Function(String path) matches,
+    FakeHandler handler,
+  ) {
+    _routes.add(_Route(method.toUpperCase(), matches, handler));
   }
 
   /// Answers matching requests with [responses] in order; the last one repeats.
@@ -67,7 +75,7 @@ class FakeHttpClientAdapter implements HttpClientAdapter {
       (r) => r.matches(options),
       orElse: () => _Route(
         options.method,
-        options.path,
+        (_) => true,
         (_) => const FakeResponse.json({
           'message': 'No fake route registered',
         }, status: 404),
@@ -93,12 +101,12 @@ class FakeHttpClientAdapter implements HttpClientAdapter {
 }
 
 class _Route {
-  const _Route(this.method, this.path, this.handler);
+  const _Route(this.method, this.matchesPath, this.handler);
 
   final String method;
-  final String path;
+  final bool Function(String path) matchesPath;
   final FakeHandler handler;
 
   bool matches(RequestOptions options) =>
-      options.method.toUpperCase() == method && options.path == path;
+      options.method.toUpperCase() == method && matchesPath(options.path);
 }
