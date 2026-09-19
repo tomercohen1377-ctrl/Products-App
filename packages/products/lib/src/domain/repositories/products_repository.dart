@@ -1,5 +1,6 @@
 import 'package:core/core.dart';
 import 'package:products/src/domain/entities/category.dart';
+import 'package:products/src/domain/entities/picked_photo.dart';
 import 'package:products/src/domain/entities/product.dart';
 import 'package:products/src/domain/entities/product_change.dart';
 import 'package:products/src/domain/entities/product_draft.dart';
@@ -22,6 +23,9 @@ abstract interface class ProductsRepository {
   Future<Result<Product>> updateProduct(int id, ProductDraft draft);
 
   Future<Result<void>> deleteProduct(int id);
+
+  /// Uploads a photo and returns the URL it can be referenced by.
+  Future<Result<String>> uploadImage(PickedPhoto photo);
 
   /// Categories a product can belong to (`categoryId` must be one of these).
   Future<Result<List<Category>>> getCategories();

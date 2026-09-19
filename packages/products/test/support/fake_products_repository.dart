@@ -45,6 +45,10 @@ class FakeProductsRepository implements ProductsRepository {
   final List<ProductDraft> created = [];
   final List<({int id, ProductDraft draft})> updated = [];
   final List<int> deleted = [];
+  final List<PickedPhoto> uploaded = [];
+  Result<String> uploadResult = const Success(
+    'https://files.test/uploaded.png',
+  );
   int categoriesCalls = 0;
 
   void publish(ProductChange change) => _changes.add(change);
@@ -134,6 +138,13 @@ class FakeProductsRepository implements ProductsRepository {
     await _holdMutation();
     if (deleteResult.isSuccess) publish(ProductDeleted(id));
     return deleteResult;
+  }
+
+  @override
+  Future<Result<String>> uploadImage(PickedPhoto photo) async {
+    uploaded.add(photo);
+    await _holdMutation();
+    return uploadResult;
   }
 
   @override

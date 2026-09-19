@@ -2,6 +2,7 @@ import 'package:network/network.dart';
 import 'package:products/src/data/dto/category_dto.dart';
 import 'package:products/src/data/dto/product_dto.dart';
 import 'package:products/src/data/dto/product_request_dto.dart';
+import 'package:products/src/domain/entities/picked_photo.dart';
 
 /// The products endpoints, over the authenticated API client.
 class ProductsRemoteSource {
@@ -42,6 +43,17 @@ class ProductsRemoteSource {
   }
 
   Future<void> deleteProduct(int id) => _dio.delete<Object?>('/products/$id');
+
+  /// `POST /files/upload` (multipart) -> the URL of the stored file.
+  Future<String> uploadImage(PickedPhoto photo) async {
+    final response = await _dio.post<Map<String, dynamic>>(
+      '/files/upload',
+      data: FormData.fromMap({
+        'file': MultipartFile.fromBytes(photo.bytes, filename: photo.name),
+      }),
+    );
+    return response.data!['location'] as String;
+  }
 
   Future<List<CategoryDto>> getCategories() async {
     final response = await _dio.get<List<dynamic>>('/categories');

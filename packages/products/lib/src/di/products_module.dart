@@ -1,9 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:network/network.dart';
 import 'package:products/src/data/repositories/products_repository_impl.dart';
+import 'package:products/src/data/services/image_photo_picker.dart';
 import 'package:products/src/data/sources/products_remote_source.dart';
 import 'package:products/src/domain/entities/product.dart';
 import 'package:products/src/domain/repositories/products_repository.dart';
+import 'package:products/src/domain/services/photo_picker.dart';
 import 'package:products/src/presentation/detail/product_detail_bloc.dart';
 import 'package:products/src/presentation/form/product_form_bloc.dart';
 import 'package:products/src/presentation/list/products_bloc.dart';
@@ -16,11 +18,12 @@ void registerProductsModule(GetIt getIt) {
     ..registerLazySingleton<ProductsRepository>(
       () => ProductsRepositoryImpl(getIt()),
     )
+    ..registerLazySingleton<PhotoPicker>(ImagePickerPhotoPicker.new)
     ..registerFactory(() => ProductsBloc(getIt()))
     ..registerFactoryParam<ProductDetailBloc, int, Product?>(
       (id, seed) => ProductDetailBloc(getIt(), productId: id, seed: seed),
     )
     ..registerFactoryParam<ProductFormBloc, Product?, void>(
-      (editing, _) => ProductFormBloc(getIt(), editing: editing),
+      (editing, _) => ProductFormBloc(getIt(), getIt(), editing: editing),
     );
 }

@@ -2,6 +2,7 @@ library;
 
 export 'src/di/products_module.dart';
 export 'src/domain/entities/category.dart';
+export 'src/domain/entities/picked_photo.dart';
 export 'src/domain/entities/product.dart';
 export 'src/domain/entities/product_change.dart';
 export 'src/domain/entities/product_draft.dart';

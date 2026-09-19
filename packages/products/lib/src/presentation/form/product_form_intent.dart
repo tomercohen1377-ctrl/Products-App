@@ -66,6 +66,11 @@ final class ProductFormImageRemoved extends ProductFormIntent {
   List<Object?> get props => [url];
 }
 
+/// Choose a photo from the gallery and upload it as an image.
+final class ProductFormPhotoUploadRequested extends ProductFormIntent {
+  const ProductFormPhotoUploadRequested();
+}
+
 final class ProductFormSubmitted extends ProductFormIntent {
   const ProductFormSubmitted();
 }

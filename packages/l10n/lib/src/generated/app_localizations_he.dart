@@ -211,4 +211,7 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get deckStartOver => 'התחלה מחדש';
+
+  @override
+  String get productImageUpload => 'העלאת תמונה';
 }

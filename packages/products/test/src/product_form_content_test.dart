@@ -179,6 +179,20 @@ void main() {
     });
   });
 
+  testWidgets('the upload photo button reports an upload request', (
+    tester,
+  ) async {
+    final intents = await pump(
+      tester,
+      const ProductFormState(categories: loaded),
+    );
+
+    await tester.ensureVisible(find.text('Upload photo'));
+    await tester.tap(find.text('Upload photo'));
+
+    expect(intents, [const ProductFormPhotoUploadRequested()]);
+  });
+
   testWidgets('renders in Hebrew', (tester) async {
     await pump(
       tester,

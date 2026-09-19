@@ -68,5 +68,7 @@
   "deckLikedCount": "{count, plural, =0{אין אהבתי עדיין} =1{אהבתם מוצר אחד} other{אהבתם {count} מוצרים}}",
   "deckEmptyTitle": "ראיתם הכול",
   "deckEmptyMessage": "זה היה המוצר האחרון. התחילו מחדש כדי לעבור עליהם שוב.",
-  "deckStartOver": "התחלה מחדש"
+  "deckStartOver": "התחלה מחדש",
+
+  "productImageUpload": "העלאת תמונה"
 }

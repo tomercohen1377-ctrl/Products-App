@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show Emitter;
 import 'package:products/src/domain/entities/product.dart';
 import 'package:products/src/domain/repositories/products_repository.dart';
+import 'package:products/src/domain/services/photo_picker.dart';
 import 'package:products/src/presentation/form/product_form_effect.dart';
 import 'package:products/src/presentation/form/product_form_intent.dart';
 import 'package:products/src/presentation/form/product_form_state.dart';
@@ -10,7 +11,7 @@ import 'package:products/src/presentation/form/product_form_state.dart';
 /// Creates a product, or edits [editing] when given.
 class ProductFormBloc
     extends MviBloc<ProductFormIntent, ProductFormState, ProductFormEffect> {
-  ProductFormBloc(this._repository, {Product? editing})
+  ProductFormBloc(this._repository, this._photoPicker, {Product? editing})
     : super(
         editing == null
             ? const ProductFormState()
@@ -40,11 +41,17 @@ class ProductFormBloc
         ),
       ),
     );
+    // Droppable: a second tap while the picker or upload is busy is ignored.
+    on<ProductFormPhotoUploadRequested>(
+      _onPhotoUploadRequested,
+      transformer: droppable(),
+    );
     // Droppable: a double tap must not create the product twice.
     on<ProductFormSubmitted>(_onSubmitted, transformer: droppable());
   }
 
   final ProductsRepository _repository;
+  final PhotoPicker _photoPicker;
 
   /// A field edit: applies it and hides a previous submit failure.
   ProductFormState _edited({
@@ -93,6 +100,29 @@ class ProductFormBloc
       return;
     }
     emit(_edited(images: [...state.images, url]).copyWith(imageUrlError: null));
+  }
+
+  Future<void> _onPhotoUploadRequested(
+    ProductFormPhotoUploadRequested intent,
+    Emitter<ProductFormState> emit,
+  ) async {
+    final photo = await _photoPicker.pickFromGallery();
+    if (photo == null) return;
+
+    emit(state.copyWith(isUploadingImage: true, imageUploadFailure: null));
+    final result = await _repository.uploadImage(photo);
+    switch (result) {
+      case Success(:final value):
+        emit(
+          _edited(
+            images: [...state.images, if (!state.images.contains(value)) value],
+          ).copyWith(isUploadingImage: false),
+        );
+      case Failed(:final failure):
+        emit(
+          state.copyWith(isUploadingImage: false, imageUploadFailure: failure),
+        );
+    }
   }
 
   Future<void> _onSubmitted(

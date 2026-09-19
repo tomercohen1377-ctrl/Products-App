@@ -213,4 +213,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deckStartOver => 'Start over';
+
+  @override
+  String get productImageUpload => 'Upload photo';
 }

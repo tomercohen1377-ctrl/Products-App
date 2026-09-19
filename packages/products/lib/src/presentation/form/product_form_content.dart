@@ -73,6 +73,9 @@ class ProductFormContent extends StatelessWidget {
             urlError: state.imageUrlError,
             showRequiredError: state.imagesError != null,
             enabled: enabled,
+            isUploading: state.isUploadingImage,
+            uploadFailure: state.imageUploadFailure,
+            onUpload: () => onIntent(const ProductFormPhotoUploadRequested()),
             onAdd: (url) => onIntent(ProductFormImageAdded(url)),
             onRemove: (url) => onIntent(ProductFormImageRemoved(url)),
           ),
@@ -158,6 +161,12 @@ Widget productFormContentErrorsPreview() => _form(
 Widget productFormContentSavingPreview() => _form(
   ProductFormState.editing(productFixture)
       .copyWith(categories: _categories, submit: const SubmitInProgress()),
+);
+
+@AppPreviews('ProductFormContent: uploading a photo')
+Widget productFormContentUploadingPreview() => _form(
+  ProductFormState.editing(productFixture)
+      .copyWith(categories: _categories, isUploadingImage: true),
 );
 
 @AppPreviews('ProductFormContent: server rejected')

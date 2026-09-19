@@ -71,6 +71,8 @@ class ProductFormState extends Equatable {
     this.showErrors = false,
     this.categories = const CategoriesLoading(),
     this.submit = const SubmitIdle(),
+    this.isUploadingImage = false,
+    this.imageUploadFailure,
   });
 
   /// A form pre-filled from an existing product.
@@ -96,6 +98,10 @@ class ProductFormState extends Equatable {
   final bool showErrors;
   final CategoriesState categories;
   final SubmitStatus submit;
+
+  /// A photo is being uploaded to become one of the product's images.
+  final bool isUploadingImage;
+  final Failure? imageUploadFailure;
 
   bool get isEditing => editingId != null;
   bool get isSubmitting => submit is SubmitInProgress;
@@ -145,6 +151,8 @@ class ProductFormState extends Equatable {
     bool? showErrors,
     CategoriesState? categories,
     SubmitStatus? submit,
+    bool? isUploadingImage,
+    Object? imageUploadFailure = keep,
   }) => ProductFormState(
     editingId: editingId,
     title: title ?? this.title,
@@ -156,6 +164,11 @@ class ProductFormState extends Equatable {
     showErrors: showErrors ?? this.showErrors,
     categories: categories ?? this.categories,
     submit: submit ?? this.submit,
+    isUploadingImage: isUploadingImage ?? this.isUploadingImage,
+    imageUploadFailure: valueOrKeep(
+      imageUploadFailure,
+      this.imageUploadFailure,
+    ),
   );
 
   static String _priceText(double price) =>
@@ -173,5 +186,7 @@ class ProductFormState extends Equatable {
     showErrors,
     categories,
     submit,
+    isUploadingImage,
+    imageUploadFailure,
   ];
 }

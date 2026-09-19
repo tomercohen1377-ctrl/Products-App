@@ -12,6 +12,9 @@ class ProductImageEditor extends StatefulWidget {
     required this.images,
     required this.onAdd,
     required this.onRemove,
+    this.onUpload,
+    this.isUploading = false,
+    this.uploadFailure,
     this.urlError,
     this.showRequiredError = false,
     this.enabled = true,
@@ -21,6 +24,11 @@ class ProductImageEditor extends StatefulWidget {
   final List<String> images;
   final ValueChanged<String> onAdd;
   final ValueChanged<String> onRemove;
+
+  /// Choose a photo and upload it; null hides the button.
+  final VoidCallback? onUpload;
+  final bool isUploading;
+  final Failure? uploadFailure;
 
   /// Why the typed URL was rejected.
   final FieldError? urlError;
@@ -101,6 +109,20 @@ class _ProductImageEditorState extends State<ProductImageEditor> {
             ),
           ],
         ),
+        if (widget.onUpload != null)
+          AppButton(
+            label: l10n.productImageUpload,
+            icon: Icons.photo_library_outlined,
+            variant: AppButtonVariant.secondary,
+            expand: false,
+            isLoading: widget.isUploading,
+            onPressed: widget.enabled ? widget.onUpload : null,
+          ),
+        if (widget.uploadFailure != null)
+          AppBanner(
+            message: widget.uploadFailure!.localized(l10n),
+            tone: AppBannerTone.error,
+          ),
         if (widget.showRequiredError)
           Text(
             l10n.productImagesRequired,
@@ -171,6 +193,20 @@ Widget productImageEditorPreview() => Column(
     ProductImageEditor(
       images: const [],
       urlError: FieldError.invalidUrl,
+      onAdd: (_) {},
+      onRemove: (_) {},
+    ),
+    ProductImageEditor(
+      images: productFixture.images,
+      isUploading: true,
+      onUpload: () {},
+      onAdd: (_) {},
+      onRemove: (_) {},
+    ),
+    ProductImageEditor(
+      images: const [],
+      onUpload: () {},
+      uploadFailure: const NetworkFailure(),
       onAdd: (_) {},
       onRemove: (_) {},
     ),

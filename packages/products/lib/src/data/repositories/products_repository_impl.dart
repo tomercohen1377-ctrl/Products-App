@@ -5,6 +5,7 @@ import 'package:network/network.dart';
 import 'package:products/src/data/mappers/product_mappers.dart';
 import 'package:products/src/data/sources/products_remote_source.dart';
 import 'package:products/src/domain/entities/category.dart';
+import 'package:products/src/domain/entities/picked_photo.dart';
 import 'package:products/src/domain/entities/product.dart';
 import 'package:products/src/domain/entities/product_change.dart';
 import 'package:products/src/domain/entities/product_draft.dart';
@@ -63,6 +64,10 @@ class ProductsRepositoryImpl implements ProductsRepository {
     if (result.isSuccess) _publishChange(ProductDeleted(id));
     return result;
   }
+
+  @override
+  Future<Result<String>> uploadImage(PickedPhoto photo) =>
+      guardApi(() => _remote.uploadImage(photo));
 
   @override
   Future<Result<List<Category>>> getCategories() async {

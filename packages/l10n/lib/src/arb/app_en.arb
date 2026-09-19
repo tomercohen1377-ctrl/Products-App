@@ -76,5 +76,7 @@
   "@deckLikedCount": {"placeholders": {"count": {"type": "int"}}},
   "deckEmptyTitle": "You've seen everything",
   "deckEmptyMessage": "That was the last product. Start over to go through them again.",
-  "deckStartOver": "Start over"
+  "deckStartOver": "Start over",
+
+  "productImageUpload": "Upload photo"
 }

@@ -8,16 +8,21 @@ import 'package:products/src/presentation/form/product_form_effect.dart';
 import 'package:products/src/presentation/form/product_form_intent.dart';
 import 'package:products/src/presentation/form/product_form_state.dart';
 
+import '../support/fake_photo_picker.dart';
 import '../support/fake_products_repository.dart';
 
 void main() {
   late FakeProductsRepository repository;
+  late FakePhotoPicker picker;
 
-  setUp(() => repository = FakeProductsRepository());
+  setUp(() {
+    repository = FakeProductsRepository();
+    picker = FakePhotoPicker();
+  });
   tearDown(() => repository.dispose());
 
   ProductFormBloc build({Product? editing}) {
-    final bloc = ProductFormBloc(repository, editing: editing);
+    final bloc = ProductFormBloc(repository, picker, editing: editing);
     addTearDown(bloc.close);
     return bloc;
   }
@@ -312,6 +317,104 @@ void main() {
       await pumpEventQueue();
 
       expect(repository.created, hasLength(1));
+    });
+  });
+
+  group('uploading a photo', () {
+    Future<ProductFormBloc> started() async {
+      final bloc = build()..add(const ProductFormStarted());
+      await pumpEventQueue();
+      return bloc;
+    }
+
+    test('adds the uploaded file as an image', () async {
+      final bloc = await started();
+
+      bloc.add(const ProductFormPhotoUploadRequested());
+      await pumpEventQueue();
+
+      expect(repository.uploaded.single.name, 'holiday.jpg');
+      expect(bloc.state.images, ['https://files.test/uploaded.png']);
+      expect(bloc.state.isUploadingImage, isFalse);
+      expect(bloc.state.imageUploadFailure, isNull);
+    });
+
+    test('dismissing the picker changes nothing', () async {
+      picker.photo = null;
+      final bloc = await started();
+
+      bloc.add(const ProductFormPhotoUploadRequested());
+      await pumpEventQueue();
+
+      expect(repository.uploaded, isEmpty);
+      expect(bloc.state.images, isEmpty);
+      expect(bloc.state.isUploadingImage, isFalse);
+    });
+
+    test(
+      'shows progress while uploading, and a second tap is ignored',
+      () async {
+        repository.holdNextMutation = Completer<void>();
+        final hold = repository.holdNextMutation!;
+        final bloc = await started();
+
+        bloc
+          ..add(const ProductFormPhotoUploadRequested())
+          ..add(const ProductFormPhotoUploadRequested());
+        await pumpEventQueue();
+        expect(bloc.state.isUploadingImage, isTrue);
+        hold.complete();
+        await pumpEventQueue();
+
+        expect(picker.picks, 1);
+        expect(repository.uploaded, hasLength(1));
+        expect(bloc.state.isUploadingImage, isFalse);
+      },
+    );
+
+    test('a failed upload is reported and adds nothing', () async {
+      repository.uploadResult = const Failed(NetworkFailure());
+      final bloc = await started();
+
+      bloc.add(const ProductFormPhotoUploadRequested());
+      await pumpEventQueue();
+
+      expect(bloc.state.images, isEmpty);
+      expect(bloc.state.imageUploadFailure, const NetworkFailure());
+      expect(bloc.state.isUploadingImage, isFalse);
+    });
+
+    test('the failure clears on the next attempt', () async {
+      repository.uploadResult = const Failed(NetworkFailure());
+      final bloc = await started();
+      bloc.add(const ProductFormPhotoUploadRequested());
+      await pumpEventQueue();
+
+      repository.uploadResult = const Success('https://files.test/ok.png');
+      bloc.add(const ProductFormPhotoUploadRequested());
+      await pumpEventQueue();
+
+      expect(bloc.state.imageUploadFailure, isNull);
+      expect(bloc.state.images, ['https://files.test/ok.png']);
+    });
+
+    test('an uploaded photo counts toward "at least one image"', () async {
+      final bloc = await started();
+      bloc
+        ..add(const ProductFormTitleChanged('Hat'))
+        ..add(const ProductFormPriceChanged('5'))
+        ..add(const ProductFormDescriptionChanged('Warm.'))
+        ..add(const ProductFormCategorySelected(1))
+        ..add(const ProductFormPhotoUploadRequested());
+      await pumpEventQueue();
+      expect(bloc.state.isValid, isTrue);
+
+      bloc.add(const ProductFormSubmitted());
+      await pumpEventQueue();
+
+      expect(repository.created.single.images, [
+        'https://files.test/uploaded.png',
+      ]);
     });
   });
 }

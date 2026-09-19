@@ -469,6 +469,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start over'**
   String get deckStartOver;
+
+  /// No description provided for @productImageUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload photo'**
+  String get productImageUpload;
 }
 
 class _AppLocalizationsDelegate

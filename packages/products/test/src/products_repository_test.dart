@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:core/core.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:network/network.dart';
 import 'package:network/testing.dart';
 import 'package:products/products.dart';
 import 'package:products/testing.dart';
@@ -196,6 +199,47 @@ void main() {
       ProductUpdated,
       ProductDeleted,
     ]);
+  });
+
+  group('uploadImage', () {
+    final photo = PickedPhoto(
+      bytes: Uint8List.fromList([9, 8, 7]),
+      name: 'cap.png',
+    );
+
+    test('posts the file as multipart and returns its URL', () async {
+      h.adapter.on(
+        'POST',
+        '/files/upload',
+        (_) => const FakeResponse.json({
+          'originalname': 'cap.png',
+          'filename': 'abc.png',
+          'location': 'https://api.test/files/abc.png',
+        }, status: 201),
+      );
+
+      final result = await h.repository.uploadImage(photo);
+
+      expect(result.valueOrNull, 'https://api.test/files/abc.png');
+      final body = h.adapter.requestsTo('POST', '/files/upload').single.data;
+      expect(body, isA<FormData>());
+      final file = (body as FormData).files.single;
+      expect(file.key, 'file');
+      expect(file.value.filename, 'cap.png');
+      expect(file.value.length, 3);
+    });
+
+    test('maps a failed upload', () async {
+      h.adapter.on(
+        'POST',
+        '/files/upload',
+        (_) => const FakeResponse.status(413),
+      );
+
+      final result = await h.repository.uploadImage(photo);
+
+      expect(result.failureOrNull, const ServerFailure(statusCode: 413));
+    });
   });
 
   group('getCategories', () {

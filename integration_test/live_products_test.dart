@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+
+import 'package:mylo_products/app/bootstrap.dart';
+import 'package:products/products.dart';
 
 import 'support/live_app.dart';
 
@@ -126,5 +130,100 @@ void main() {
     await tester.tap(find.text('List'));
     await tester.pumpAndSettle();
     expect(find.byTooltip('Like'), findsNothing);
+  });
+
+  testWidgets('live API: uploading a photo returns a URL that serves it', (
+    tester,
+  ) async {
+    // A 1x1 PNG. The native picker cannot be driven from a test, so this
+    // exercises everything after it: multipart upload through the real
+    // client and interceptors.
+    final png = Uint8List.fromList(const [
+      0x89,
+      0x50,
+      0x4e,
+      0x47,
+      0x0d,
+      0x0a,
+      0x1a,
+      0x0a,
+      0x00,
+      0x00,
+      0x00,
+      0x0d,
+      0x49,
+      0x48,
+      0x44,
+      0x52,
+      0x00,
+      0x00,
+      0x00,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      0x01,
+      0x08,
+      0x06,
+      0x00,
+      0x00,
+      0x00,
+      0x1f,
+      0x15,
+      0xc4,
+      0x89,
+      0x00,
+      0x00,
+      0x00,
+      0x0d,
+      0x49,
+      0x44,
+      0x41,
+      0x54,
+      0x78,
+      0xda,
+      0x63,
+      0xfc,
+      0xff,
+      0x9f,
+      0xa1,
+      0x1e,
+      0x00,
+      0x07,
+      0x82,
+      0x02,
+      0x7f,
+      0x3d,
+      0xc8,
+      0x48,
+      0xef,
+      0x00,
+      0x00,
+      0x00,
+      0x00,
+      0x49,
+      0x45,
+      0x4e,
+      0x44,
+      0xae,
+      0x42,
+      0x60,
+      0x82,
+    ]);
+    final repository = bootstrap(devTools: true)<ProductsRepository>();
+
+    final result = await repository.uploadImage(
+      PickedPhoto(bytes: png, name: 'mylo-e2e.png'),
+    );
+
+    final url = result.valueOrNull;
+    expect(url, isNotNull, reason: 'upload failed: ${result.failureOrNull}');
+    final client = HttpClient();
+    try {
+      final response = await (await client.getUrl(Uri.parse(url!))).close();
+      expect(response.statusCode, 200);
+    } finally {
+      client.close();
+    }
   });
 }

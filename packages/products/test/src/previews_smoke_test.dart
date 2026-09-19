@@ -38,6 +38,7 @@ void main() {
     'ProductFormContent editing': productFormContentEditingPreview,
     'ProductFormContent errors': productFormContentErrorsPreview,
     'ProductFormContent saving': productFormContentSavingPreview,
+    'ProductFormContent uploading': productFormContentUploadingPreview,
     'ProductFormContent rejected': productFormContentRejectedPreview,
     'ProductFormContent categories loading':
         productFormContentCategoriesLoadingPreview,
