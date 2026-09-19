@@ -14,6 +14,12 @@ class FakeResponse {
     : body = null,
       status = 0;
 
+  /// No connection at all.
+  const FakeResponse.offline() : this.failure(DioExceptionType.connectionError);
+
+  /// The server never answered in time.
+  const FakeResponse.timeout() : this.failure(DioExceptionType.receiveTimeout);
+
   final Object? body;
   final int status;
   final DioExceptionType? errorType;
