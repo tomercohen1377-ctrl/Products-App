@@ -1,0 +1,67 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Hebrew (`he`).
+class AppLocalizationsHe extends AppLocalizations {
+  AppLocalizationsHe([String locale = 'he']) : super(locale);
+
+  @override
+  String get appTitle => 'מוצרי Mylo';
+
+  @override
+  String get retry => 'נסו שוב';
+
+  @override
+  String get loading => 'טוען';
+
+  @override
+  String get emptyTitle => 'אין כאן עדיין כלום';
+
+  @override
+  String get imageUnavailable => 'התמונה אינה זמינה';
+
+  @override
+  String get showPassword => 'הצגת סיסמה';
+
+  @override
+  String get hidePassword => 'הסתרת סיסמה';
+
+  @override
+  String get errorNetwork => 'אין חיבור לאינטרנט. בדקו את הרשת ונסו שוב.';
+
+  @override
+  String get errorTimeout => 'הבקשה נמשכה יותר מדי זמן. נסו שוב.';
+
+  @override
+  String get errorUnauthorized => 'פג תוקף ההתחברות. יש להתחבר מחדש.';
+
+  @override
+  String errorServer(int statusCode) {
+    return 'אירעה תקלה בשרת (קוד $statusCode). נסו שוב מאוחר יותר.';
+  }
+
+  @override
+  String get errorValidation => 'חלק מהפרטים אינם תקינים.';
+
+  @override
+  String get errorUnknown => 'משהו השתבש. נסו שוב.';
+
+  @override
+  String get fieldRequired => 'שדה חובה';
+
+  @override
+  String get fieldInvalidEmail => 'הזינו כתובת אימייל תקינה';
+
+  @override
+  String get fieldInvalidNumber => 'הזינו מספר תקין';
+
+  @override
+  String get fieldNotPositive => 'הערך חייב להיות גדול מאפס';
+
+  @override
+  String get fieldInvalidUrl => 'הזינו קישור http(s) תקין';
+}

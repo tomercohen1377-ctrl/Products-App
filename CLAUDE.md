@@ -11,6 +11,7 @@ Flutter products app on the Platzi Fake Store API (`https://api.escuelajs.co/api
 | Run the app | `flutter run` |
 | Widget previews | `flutter widget-preview start` |
 | Regenerate code (DTOs) | `dart run build_runner build --delete-conflicting-outputs` (inside the package) |
+| Regenerate strings (after editing ARB) | `flutter gen-l10n` then `dart format packages/l10n` (inside `packages/l10n`) |
 | Test user | `john@mail.com` / `changeme` |
 
 ## Layout

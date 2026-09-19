@@ -1,0 +1,24 @@
+{
+  "@@locale": "he",
+
+  "appTitle": "מוצרי Mylo",
+  "retry": "נסו שוב",
+  "loading": "טוען",
+  "emptyTitle": "אין כאן עדיין כלום",
+  "imageUnavailable": "התמונה אינה זמינה",
+  "showPassword": "הצגת סיסמה",
+  "hidePassword": "הסתרת סיסמה",
+
+  "errorNetwork": "אין חיבור לאינטרנט. בדקו את הרשת ונסו שוב.",
+  "errorTimeout": "הבקשה נמשכה יותר מדי זמן. נסו שוב.",
+  "errorUnauthorized": "פג תוקף ההתחברות. יש להתחבר מחדש.",
+  "errorServer": "אירעה תקלה בשרת (קוד {statusCode}). נסו שוב מאוחר יותר.",
+  "errorValidation": "חלק מהפרטים אינם תקינים.",
+  "errorUnknown": "משהו השתבש. נסו שוב.",
+
+  "fieldRequired": "שדה חובה",
+  "fieldInvalidEmail": "הזינו כתובת אימייל תקינה",
+  "fieldInvalidNumber": "הזינו מספר תקין",
+  "fieldNotPositive": "הערך חייב להיות גדול מאפס",
+  "fieldInvalidUrl": "הזינו קישור http(s) תקין"
+}

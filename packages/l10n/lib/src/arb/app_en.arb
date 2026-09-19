@@ -1,0 +1,29 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Mylo Products",
+  "retry": "Try again",
+  "loading": "Loading",
+  "emptyTitle": "Nothing here yet",
+  "imageUnavailable": "Image unavailable",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
+
+  "errorNetwork": "No internet connection. Check your network and try again.",
+  "errorTimeout": "The request timed out. Please try again.",
+  "errorUnauthorized": "Your session has expired. Please sign in again.",
+  "errorServer": "The server had a problem (code {statusCode}). Please try again later.",
+  "@errorServer": {
+    "placeholders": {
+      "statusCode": {"type": "int"}
+    }
+  },
+  "errorValidation": "Some of the information isn't valid.",
+  "errorUnknown": "Something went wrong. Please try again.",
+
+  "fieldRequired": "This field is required",
+  "fieldInvalidEmail": "Enter a valid email address",
+  "fieldInvalidNumber": "Enter a valid number",
+  "fieldNotPositive": "Must be greater than zero",
+  "fieldInvalidUrl": "Enter a valid http(s) link"
+}
