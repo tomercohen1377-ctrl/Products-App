@@ -29,6 +29,24 @@ class FakeProductsRepository implements ProductsRepository {
   /// The next `getProducts` call waits for this before answering.
   Completer<void>? holdNext;
 
+  /// The next create/update/delete waits for this before answering.
+  Completer<void>? holdNextMutation;
+
+  Result<Product>? getProductResult;
+  Result<Product>? createResult;
+  Result<Product>? updateResult;
+  Result<void> deleteResult = const Success(null);
+  Result<List<Category>> categoriesResult = const Success([
+    Category(id: 1, name: 'Clothes'),
+    Category(id: 2, name: 'Shoes'),
+  ]);
+
+  final List<int> getProductCalls = [];
+  final List<ProductDraft> created = [];
+  final List<({int id, ProductDraft draft})> updated = [];
+  final List<int> deleted = [];
+  int categoriesCalls = 0;
+
   void publish(ProductChange change) => _changes.add(change);
 
   @override
@@ -59,23 +77,80 @@ class FakeProductsRepository implements ProductsRepository {
   }
 
   @override
-  Future<Result<Product>> getProduct(int id) async => Success(
-    server.firstWhere((p) => p.id == id, orElse: () => makeProducts(1).first),
-  );
+  Future<Result<Product>> getProduct(int id) async {
+    getProductCalls.add(id);
+    await _hold(holdNext);
+    holdNext = null;
+    return getProductResult ??
+        Success(
+          server.firstWhere(
+            (p) => p.id == id,
+            orElse: () => makeProducts(1).first,
+          ),
+        );
+  }
 
   @override
-  Future<Result<Product>> createProduct(ProductDraft draft) =>
-      throw UnimplementedError();
+  Future<Result<Product>> createProduct(ProductDraft draft) async {
+    created.add(draft);
+    await _holdMutation();
+    final result =
+        createResult ??
+        Success(
+          Product(
+            id: 1000 + created.length,
+            title: draft.title,
+            price: draft.price,
+            description: draft.description,
+            images: draft.images,
+          ),
+        );
+    if (result case Success(:final value)) publish(ProductCreated(value));
+    return result;
+  }
 
   @override
-  Future<Result<Product>> updateProduct(int id, ProductDraft draft) =>
-      throw UnimplementedError();
+  Future<Result<Product>> updateProduct(int id, ProductDraft draft) async {
+    updated.add((id: id, draft: draft));
+    await _holdMutation();
+    final result =
+        updateResult ??
+        Success(
+          Product(
+            id: id,
+            title: draft.title,
+            price: draft.price,
+            description: draft.description,
+            images: draft.images,
+          ),
+        );
+    if (result case Success(:final value)) publish(ProductUpdated(value));
+    return result;
+  }
 
   @override
-  Future<Result<void>> deleteProduct(int id) => throw UnimplementedError();
+  Future<Result<void>> deleteProduct(int id) async {
+    deleted.add(id);
+    await _holdMutation();
+    if (deleteResult.isSuccess) publish(ProductDeleted(id));
+    return deleteResult;
+  }
 
   @override
-  Future<Result<List<Category>>> getCategories() => throw UnimplementedError();
+  Future<Result<List<Category>>> getCategories() async {
+    categoriesCalls++;
+    return categoriesResult;
+  }
+
+  Future<void> _hold(Completer<void>? hold) async {
+    if (hold != null) await hold.future;
+  }
+
+  Future<void> _holdMutation() async {
+    final hold = holdNextMutation;
+    holdNextMutation = null;
+    await _hold(hold);
+  }
 
   Future<void> dispose() => _changes.close();
 }

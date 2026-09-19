@@ -8,6 +8,8 @@ import 'package:mylo_products/app/bootstrap.dart';
 import 'package:network/network.dart';
 import 'package:network/testing.dart';
 
+import 'fake_backend.dart';
+
 /// The whole app (real bootstrap, router, blocs, interceptors) over an
 /// in-memory keystore and a scripted transport.
 class AppHarness {
@@ -27,29 +29,15 @@ class AppHarness {
         '/auth/refresh-token',
         (_) => const FakeResponse.status(401),
       );
-    adapter.on(
-      'GET',
-      '/products',
-      (_) => const FakeResponse.json(productsJson),
-    );
+    backend.install(adapter);
     acceptToken('access-1');
   }
 
   final InMemoryTokenStorage storage;
   final FakeHttpClientAdapter adapter = FakeHttpClientAdapter();
+  final FakeBackend backend = FakeBackend();
   final bool devTools;
   GetIt? _getIt;
-
-  static const productsJson = [
-    {
-      'id': 1,
-      'title': 'Fixture Hat',
-      'price': 10,
-      'description': 'A hat.',
-      'images': ['https://i.imgur.com/1twoaDy.jpeg'],
-      'category': {'id': 1, 'name': 'Clothes'},
-    },
-  ];
 
   static const user = {
     'id': 1,

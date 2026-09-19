@@ -395,4 +395,33 @@ void main() {
       expect(repository.requests.single.offset, 2);
     });
   });
+
+  group('navigation intents', () {
+    test('selecting a product asks to open it', () async {
+      final bloc = build();
+      addTearDown(bloc.close);
+      final effects = <ProductsEffect>[];
+      final subscription = bloc.effects.listen(effects.add);
+      addTearDown(subscription.cancel);
+      final product = makeProducts(1).single;
+
+      bloc.add(ProductSelected(product));
+      await pumpEventQueue();
+
+      expect(effects, [OpenProductDetail(product)]);
+    });
+
+    test('add asks to open the form', () async {
+      final bloc = build();
+      addTearDown(bloc.close);
+      final effects = <ProductsEffect>[];
+      final subscription = bloc.effects.listen(effects.add);
+      addTearDown(subscription.cancel);
+
+      bloc.add(const AddProductRequested());
+      await pumpEventQueue();
+
+      expect(effects, [const OpenProductForm()]);
+    });
+  });
 }

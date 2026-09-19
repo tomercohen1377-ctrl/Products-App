@@ -45,14 +45,25 @@ class ProductsContent extends StatelessWidget {
       ),
       child: PaginatedList(
         itemCount: state.items.length,
-        itemBuilder: (context, index) =>
-            ProductTile(product: state.items[index]),
+        itemBuilder: (context, index) {
+          final product = state.items[index];
+          return ProductTile(
+            product: product,
+            onTap: () => onIntent(ProductSelected(product)),
+          );
+        },
         onLoadMore: () => onIntent(const ProductsNextPageRequested()),
         hasReachedEnd: state.hasReachedEnd,
         isLoadingMore: state.isLoadingMore,
         loadMoreFailure: state.loadMoreFailure,
         onRefresh: onRefresh,
-        padding: const EdgeInsetsDirectional.all(DSSpacing.m),
+        // Bottom room so the add button never hides the last product.
+        padding: const EdgeInsetsDirectional.only(
+          start: DSSpacing.m,
+          end: DSSpacing.m,
+          top: DSSpacing.m,
+          bottom: DSDimensions.buttonHeight + DSSpacing.xxl,
+        ),
       ),
     );
   }

@@ -37,28 +37,24 @@ class ProductsState extends Equatable {
       phase == ProductsPhase.failure ? failure : null;
   bool get isEmpty => phase == ProductsPhase.ready && items.isEmpty;
 
-  static const Object _unset = Object();
-
   ProductsState copyWith({
     ProductsPhase? phase,
     List<Product>? items,
     int? nextOffset,
-    Object? failure = _unset,
+    Object? failure = keep,
     bool? isRefreshing,
     bool? isLoadingMore,
     bool? hasReachedEnd,
-    Object? loadMoreFailure = _unset,
+    Object? loadMoreFailure = keep,
   }) => ProductsState(
     phase: phase ?? this.phase,
     items: items ?? this.items,
     nextOffset: nextOffset ?? this.nextOffset,
-    failure: identical(failure, _unset) ? this.failure : failure as Failure?,
+    failure: valueOrKeep(failure, this.failure),
     isRefreshing: isRefreshing ?? this.isRefreshing,
     isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
-    loadMoreFailure: identical(loadMoreFailure, _unset)
-        ? this.loadMoreFailure
-        : loadMoreFailure as Failure?,
+    loadMoreFailure: valueOrKeep(loadMoreFailure, this.loadMoreFailure),
   );
 
   @override

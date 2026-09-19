@@ -82,6 +82,15 @@ void main() {
     expect(find.text('Product 3'), findsOneWidget);
   });
 
+  testWidgets('tapping a product reports the selection', (tester) async {
+    final intents = await pump(tester, ready());
+    await tester.pump(const Duration(milliseconds: 250));
+
+    await tester.tap(find.text('Product 2'));
+
+    expect(intents, [ProductSelected(makeProducts(3)[1])]);
+  });
+
   testWidgets('shows a spinner footer while loading more', (tester) async {
     await pump(tester, ready(hasReachedEnd: false, isLoadingMore: true));
     await tester.pump(const Duration(milliseconds: 250));

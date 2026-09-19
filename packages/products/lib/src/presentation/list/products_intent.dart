@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:products/src/domain/entities/product.dart';
 import 'package:products/src/domain/entities/product_change.dart';
 
 sealed class ProductsIntent extends Equatable {
@@ -31,4 +32,19 @@ final class ProductsChangeReceived extends ProductsIntent {
 
   @override
   List<Object?> get props => [change];
+}
+
+/// The user tapped a product.
+final class ProductSelected extends ProductsIntent {
+  const ProductSelected(this.product);
+
+  final Product product;
+
+  @override
+  List<Object?> get props => [product];
+}
+
+/// The user wants to create a product.
+final class AddProductRequested extends ProductsIntent {
+  const AddProductRequested();
 }

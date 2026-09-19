@@ -22,6 +22,10 @@ class ProductsBloc
     // Restartable: a newer refresh supersedes an older one.
     on<ProductsRefreshed>(_onRefreshed, transformer: restartable());
     on<ProductsChangeReceived>(_onChange, transformer: sequential());
+    on<ProductSelected>(
+      (intent, _) => emitEffect(OpenProductDetail(intent.product)),
+    );
+    on<AddProductRequested>((intent, _) => emitEffect(const OpenProductForm()));
 
     _changes = _repository.changes.listen(
       (change) => add(ProductsChangeReceived(change)),

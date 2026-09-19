@@ -2,12 +2,14 @@ import 'package:core/core.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:l10n/l10n.dart';
 import 'package:products/src/presentation/list/products_bloc.dart';
 import 'package:products/src/presentation/list/products_content.dart';
 import 'package:products/src/presentation/list/products_effect.dart';
 import 'package:products/src/presentation/list/products_intent.dart';
 import 'package:products/src/presentation/list/products_state.dart';
+import 'package:products/src/presentation/products_routes.dart';
 
 /// Container: needs a [ProductsBloc] above it. [actions] are app-bar actions
 /// supplied by the app (e.g. the account button), so this feature does not
@@ -20,12 +22,25 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(title: Text(context.l10n.productsTitle), actions: actions),
+    floatingActionButton: Builder(
+      builder: (context) => FloatingActionButton.extended(
+        onPressed: () =>
+            context.read<ProductsBloc>().add(const AddProductRequested()),
+        icon: const Icon(Icons.add_rounded),
+        label: Text(context.l10n.productAdd),
+      ),
+    ),
     body: MviView<ProductsBloc, ProductsState, ProductsEffect>(
       onEffect: (context, effect) => switch (effect) {
         ProductsRefreshFailed(:final failure) => _showSnackBar(
           context,
           failure.localized(context.l10n),
         ),
+        OpenProductDetail(:final product) => context.push<void>(
+          ProductsRoutes.detail(product.id),
+          extra: product,
+        ),
+        OpenProductForm() => context.push<void>(ProductsRoutes.create),
       },
       builder: (context, state) {
         final bloc = context.read<ProductsBloc>();
