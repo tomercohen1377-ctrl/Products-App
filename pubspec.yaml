@@ -1,0 +1,40 @@
+name: mylo_products
+description: "Products app on the Platzi Fake Store API (Mylo take-home)."
+publish_to: none
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.0
+  flutter: 3.47.0
+
+workspace:
+  - packages/core
+  - packages/network
+  - packages/l10n
+  - packages/design_system
+  - packages/auth
+  - packages/products
+
+dependencies:
+  flutter:
+    sdk: flutter
+  core:
+    path: packages/core
+  network:
+    path: packages/network
+  l10n:
+    path: packages/l10n
+  design_system:
+    path: packages/design_system
+  auth:
+    path: packages/auth
+  products:
+    path: packages/products
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 6.0.0
+
+flutter:
+  uses-material-design: true

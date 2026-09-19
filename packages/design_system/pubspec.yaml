@@ -1,0 +1,17 @@
+name: design_system
+description: "Design tokens, theme, shared widgets, previews, swipe deck animation."
+version: 0.0.1
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.13.0
+  flutter: 3.47.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
