@@ -3,6 +3,7 @@ import 'package:core/core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mylo_products/app/dev/dev_tools.dart';
 import 'package:network/network.dart';
+import 'package:products/products.dart';
 
 /// The demo account from the assignment, pre-filled on the login form in dev
 /// builds only.
@@ -31,5 +32,6 @@ GetIt bootstrap({
     storage: storage,
     adapter: adapter,
   );
+  registerProductsModule(getIt);
   return getIt;
 }

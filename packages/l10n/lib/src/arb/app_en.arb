@@ -36,5 +36,9 @@
   "loginInvalidCredentials": "Incorrect email or password.",
   "accountTooltip": "Account",
   "accountSignedInAs": "Signed in as",
-  "accountSignOut": "Sign out"
+  "accountSignOut": "Sign out",
+
+  "refresh": "Refresh",
+  "productsEmptyTitle": "No products yet",
+  "productsEmptyMessage": "Products you add will show up here."
 }

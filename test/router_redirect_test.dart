@@ -2,6 +2,7 @@ import 'package:auth/auth.dart';
 import 'package:auth/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mylo_products/app/router/app_router.dart';
+import 'package:products/products.dart';
 
 void main() {
   const unknown = SessionState.unknown();
@@ -33,12 +34,12 @@ void main() {
     'signed in, on login -> products': (
       signedIn,
       AuthRoutes.login,
-      AppRoutes.products,
+      ProductsRoutes.list,
     ),
     'signed in, on splash -> products': (
       signedIn,
       AuthRoutes.splash,
-      AppRoutes.products,
+      ProductsRoutes.list,
     ),
     'signed in, on products -> stay': (signedIn, '/products', null),
     'signed in, deep link -> stay': (signedIn, '/products/42', null),

@@ -94,4 +94,13 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get accountSignOut => 'התנתקות';
+
+  @override
+  String get refresh => 'רענון';
+
+  @override
+  String get productsEmptyTitle => 'אין מוצרים עדיין';
+
+  @override
+  String get productsEmptyMessage => 'מוצרים שתוסיפו יופיעו כאן.';
 }

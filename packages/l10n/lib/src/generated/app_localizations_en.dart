@@ -96,4 +96,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get accountSignOut => 'Sign out';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String get productsEmptyTitle => 'No products yet';
+
+  @override
+  String get productsEmptyMessage => 'Products you add will show up here.';
 }

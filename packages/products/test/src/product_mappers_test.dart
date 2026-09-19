@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:products/products.dart';
 import 'package:products/src/data/dto/category_dto.dart';
 import 'package:products/src/data/dto/product_dto.dart';
 import 'package:products/src/data/mappers/product_mappers.dart';
-import 'package:products/products.dart';
 import 'package:products/testing.dart';
 
 import '../support/json.dart';

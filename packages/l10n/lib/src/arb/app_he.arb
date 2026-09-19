@@ -31,5 +31,9 @@
   "loginInvalidCredentials": "אימייל או סיסמה שגויים.",
   "accountTooltip": "חשבון",
   "accountSignedInAs": "מחובר בתור",
-  "accountSignOut": "התנתקות"
+  "accountSignOut": "התנתקות",
+
+  "refresh": "רענון",
+  "productsEmptyTitle": "אין מוצרים עדיין",
+  "productsEmptyMessage": "מוצרים שתוסיפו יופיעו כאן."
 }

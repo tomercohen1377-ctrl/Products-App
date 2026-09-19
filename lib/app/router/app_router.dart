@@ -2,12 +2,8 @@ import 'package:auth/auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mylo_products/app/home/home_placeholder.dart';
 import 'package:mylo_products/app/router/stream_listenable.dart';
-
-abstract final class AppRoutes {
-  static const String products = '/products';
-}
+import 'package:products/products.dart';
 
 /// Where the user should be for a given session and current location, or null
 /// to stay put. One rule for the whole app: unknown -> splash, signed out ->
@@ -18,7 +14,7 @@ String? sessionRedirect(SessionState session, String location) {
 
   if (!session.isKnown) return onSplash ? null : AuthRoutes.splash;
   if (!session.isAuthenticated) return onLogin ? null : AuthRoutes.login;
-  return (onSplash || onLogin) ? AppRoutes.products : null;
+  return (onSplash || onLogin) ? ProductsRoutes.list : null;
 }
 
 GoRouter createRouter({
@@ -34,10 +30,7 @@ GoRouter createRouter({
         sessionRedirect(session.state, state.matchedLocation),
     routes: [
       ...authRoutes(getIt),
-      GoRoute(
-        path: AppRoutes.products,
-        builder: (context, state) => const HomePlaceholder(),
-      ),
+      ...productsRoutes(getIt, appBarActions: const [AccountButton()]),
     ],
   );
 }

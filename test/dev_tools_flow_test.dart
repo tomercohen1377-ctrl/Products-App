@@ -35,9 +35,9 @@ void main() {
 
       await openDevTools(tester);
       await tester.tap(find.textContaining('Expire access token'));
-      await tester.settle();
+      await tester.settleApp();
       await tester.tap(find.text('Call profile now'));
-      await tester.settle();
+      await tester.settleApp();
 
       expect(find.textContaining('recovered transparently'), findsOneWidget);
       expect(h.adapter.count('POST', '/auth/refresh-token'), 1);
@@ -53,9 +53,9 @@ void main() {
 
     await openDevTools(tester);
     await tester.tap(find.textContaining('Kill session'));
-    await tester.settle();
+    await tester.settleApp();
     await tester.tap(find.text('Call profile now'));
-    await tester.settle();
+    await tester.settleApp();
 
     expect(find.text('Welcome back'), findsOneWidget);
     expect(

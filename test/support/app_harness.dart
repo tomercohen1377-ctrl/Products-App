@@ -1,4 +1,5 @@
 import 'package:auth/testing.dart';
+import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -26,6 +27,11 @@ class AppHarness {
         '/auth/refresh-token',
         (_) => const FakeResponse.status(401),
       );
+    adapter.on(
+      'GET',
+      '/products',
+      (_) => const FakeResponse.json(productsJson),
+    );
     acceptToken('access-1');
   }
 
@@ -33,6 +39,17 @@ class AppHarness {
   final FakeHttpClientAdapter adapter = FakeHttpClientAdapter();
   final bool devTools;
   GetIt? _getIt;
+
+  static const productsJson = [
+    {
+      'id': 1,
+      'title': 'Fixture Hat',
+      'price': 10,
+      'description': 'A hat.',
+      'images': ['https://i.imgur.com/1twoaDy.jpeg'],
+      'category': {'id': 1, 'name': 'Clothes'},
+    },
+  ];
 
   static const user = {
     'id': 1,
@@ -65,17 +82,15 @@ class AppHarness {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(build());
-    await tester.settle();
+    await tester.settleApp();
   }
 }
 
 extension AppTester on WidgetTester {
-  /// Runs real event-loop turns (bloc pipelines, async I/O fakes) and the
-  /// frames they trigger.
-  Future<void> settle() async {
-    await runAsync(() => pumpEventQueue());
-    await pump();
-    await pump(const Duration(milliseconds: 100));
+  /// `settle` plus waiting out route and sheet animations (the app has no
+  /// endless spinner once loaded).
+  Future<void> settleApp() async {
+    await settle();
     await pumpAndSettle();
   }
 }

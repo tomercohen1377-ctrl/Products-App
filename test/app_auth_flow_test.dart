@@ -12,7 +12,7 @@ void main() {
     await tester.enterText(find.byType(TextField).at(0), 'john@mail.com');
     await tester.enterText(find.byType(TextField).at(1), 'changeme');
     await tester.tap(find.text('Sign in'));
-    await tester.settle();
+    await tester.settleApp();
   }
 
   testWidgets('cold start with no session shows login', (tester) async {
@@ -30,6 +30,7 @@ void main() {
     await signIn(tester);
 
     expect(find.text('Products'), findsOneWidget);
+    expect(find.text('Fixture Hat'), findsOneWidget);
     expect(find.text('Welcome back'), findsNothing);
     expect(h.storage.tokens?.accessToken, 'access-1');
   });
@@ -59,11 +60,11 @@ void main() {
     final second = AppHarness(signedIn: false)
       ..storage.tokens = first.storage.tokens;
     await tester.pumpWidget(second.build());
-    await tester.settle();
+    await tester.settleApp();
 
     expect(find.text('Products'), findsOneWidget);
     expect(find.text('Welcome back'), findsNothing);
-    expect(find.text('John'), findsOneWidget);
+    expect(find.text('Fixture Hat'), findsOneWidget);
   });
 
   testWidgets('logout clears the stored session', (tester) async {
@@ -74,7 +75,7 @@ void main() {
     await tester.tap(find.byTooltip('Account'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Sign out'));
-    await tester.settle();
+    await tester.settleApp();
 
     expect(find.text('Welcome back'), findsOneWidget);
     expect(h.storage.tokens, isNull);
