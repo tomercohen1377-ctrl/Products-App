@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:network/testing.dart';
 
@@ -71,5 +72,30 @@ void main() {
 
     expect(find.text('john@mail.com'), findsOneWidget);
     expect(find.text('Welcome back'), findsOneWidget);
+  });
+
+  testWidgets('the language switch shows the app in Hebrew, right to left', (
+    tester,
+  ) async {
+    final h = AppHarness(signedIn: true, devTools: true);
+    await h.launch(tester);
+    expect(find.text('Products'), findsOneWidget);
+
+    await openDevTools(tester);
+    await tester.tap(find.text('עברית'));
+    await tester.pumpAndSettle();
+    await tester.tapAt(const Offset(200, 60));
+    await tester.pumpAndSettle();
+
+    expect(find.text('מוצרים'), findsOneWidget);
+    final direction = Directionality.of(tester.element(find.text('מוצרים')));
+    expect(direction, TextDirection.rtl);
+
+    await openDevTools(tester);
+    await tester.tap(find.text('English'));
+    await tester.pumpAndSettle();
+    await tester.tapAt(const Offset(200, 60));
+    await tester.pumpAndSettle();
+    expect(find.text('Products'), findsOneWidget);
   });
 }

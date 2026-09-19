@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:l10n/l10n.dart';
 import 'package:mylo_products/app/dev/dev_tools.dart';
 import 'package:mylo_products/app/dev/dev_tools_overlay.dart';
+import 'package:mylo_products/app/dev/locale_controller.dart';
 import 'package:mylo_products/app/router/app_router.dart';
 
 class MyloApp extends StatefulWidget {
@@ -25,6 +26,7 @@ class MyloApp extends StatefulWidget {
 
 class _MyloAppState extends State<MyloApp> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final LocaleController _locale = LocaleController();
   late final SessionBloc _session = widget.getIt<SessionBloc>()
     ..add(const SessionStarted());
   late final GoRouter _router = createRouter(
@@ -36,6 +38,7 @@ class _MyloAppState extends State<MyloApp> {
   @override
   void dispose() {
     _router.dispose();
+    _locale.dispose();
     _session.close();
     super.dispose();
   }
@@ -43,21 +46,26 @@ class _MyloAppState extends State<MyloApp> {
   @override
   Widget build(BuildContext context) => BlocProvider<SessionBloc>.value(
     value: _session,
-    child: MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routerConfig: _router,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      onGenerateTitle: (context) => context.l10n.appTitle,
-      builder: (context, child) => widget.devTools
-          ? DevToolsOverlay(
-              navigatorKey: _navigatorKey,
-              tools: widget.getIt<AuthDebugTools>(),
-              child: child!,
-            )
-          : child!,
+    child: ListenableBuilder(
+      listenable: _locale,
+      builder: (context, _) => MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routerConfig: _router,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        locale: _locale.value,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        onGenerateTitle: (context) => context.l10n.appTitle,
+        builder: (context, child) => widget.devTools
+            ? DevToolsOverlay(
+                navigatorKey: _navigatorKey,
+                tools: widget.getIt<AuthDebugTools>(),
+                localeController: _locale,
+                child: child!,
+              )
+            : child!,
+      ),
     ),
   );
 }

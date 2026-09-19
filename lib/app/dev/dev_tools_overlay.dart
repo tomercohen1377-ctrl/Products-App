@@ -2,6 +2,7 @@ import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mylo_products/app/dev/dev_tools_sheet.dart';
+import 'package:mylo_products/app/dev/locale_controller.dart';
 
 /// A small floating button (only while signed in) that opens [DevToolsSheet].
 /// Lives above the router so it is reachable from every screen.
@@ -12,12 +13,14 @@ class DevToolsOverlay extends StatelessWidget {
   const DevToolsOverlay({
     required this.navigatorKey,
     required this.tools,
+    required this.localeController,
     required this.child,
     super.key,
   });
 
   final GlobalKey<NavigatorState> navigatorKey;
   final AuthDebugTools tools;
+  final LocaleController localeController;
   final Widget child;
 
   @override
@@ -27,8 +30,11 @@ class DevToolsOverlay extends StatelessWidget {
       Overlay(
         initialEntries: [
           OverlayEntry(
-            builder: (context) =>
-                _DevToolsButton(navigatorKey: navigatorKey, tools: tools),
+            builder: (context) => _DevToolsButton(
+              navigatorKey: navigatorKey,
+              tools: tools,
+              localeController: localeController,
+            ),
           ),
         ],
       ),
@@ -37,10 +43,15 @@ class DevToolsOverlay extends StatelessWidget {
 }
 
 class _DevToolsButton extends StatelessWidget {
-  const _DevToolsButton({required this.navigatorKey, required this.tools});
+  const _DevToolsButton({
+    required this.navigatorKey,
+    required this.tools,
+    required this.localeController,
+  });
 
   final GlobalKey<NavigatorState> navigatorKey;
   final AuthDebugTools tools;
+  final LocaleController localeController;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +76,10 @@ class _DevToolsButton extends StatelessWidget {
                 context: navigatorContext,
                 showDragHandle: true,
                 isScrollControlled: true,
-                builder: (_) => DevToolsSheet(tools: tools),
+                builder: (_) => DevToolsSheet(
+                  tools: tools,
+                  localeController: localeController,
+                ),
               );
             },
             child: const Icon(Icons.bug_report_outlined),
