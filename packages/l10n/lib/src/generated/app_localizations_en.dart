@@ -105,4 +105,78 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productsEmptyMessage => 'Products you add will show up here.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get productAdd => 'Add product';
+
+  @override
+  String get productEdit => 'Edit';
+
+  @override
+  String get productDelete => 'Delete';
+
+  @override
+  String get productDeleteTitle => 'Delete this product?';
+
+  @override
+  String productDeleteMessage(String title) {
+    return '\"$title\" will be removed. This can\'t be undone.';
+  }
+
+  @override
+  String get productDeleted => 'Product deleted';
+
+  @override
+  String get productSaved => 'Product saved';
+
+  @override
+  String get productCreateTitle => 'New product';
+
+  @override
+  String get productEditTitle => 'Edit product';
+
+  @override
+  String get productFieldTitle => 'Title';
+
+  @override
+  String get productFieldPrice => 'Price';
+
+  @override
+  String get productFieldDescription => 'Description';
+
+  @override
+  String get productFieldCategory => 'Category';
+
+  @override
+  String get productImagesTitle => 'Images';
+
+  @override
+  String get productImageUrlLabel => 'Image URL';
+
+  @override
+  String get productImageAdd => 'Add image';
+
+  @override
+  String get productImageRemove => 'Remove image';
+
+  @override
+  String get productImagesRequired => 'Add at least one image';
+
+  @override
+  String get productCategoriesEmpty =>
+      'There are no categories yet, so a product can\'t be created right now.';
+
+  @override
+  String get productSubmitCreate => 'Create product';
+
+  @override
+  String get productSubmitSave => 'Save changes';
+
+  @override
+  String productImageCounter(int current, int total) {
+    return 'Image $current of $total';
+  }
 }

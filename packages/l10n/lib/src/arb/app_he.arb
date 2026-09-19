@@ -35,5 +35,29 @@
 
   "refresh": "רענון",
   "productsEmptyTitle": "אין מוצרים עדיין",
-  "productsEmptyMessage": "מוצרים שתוסיפו יופיעו כאן."
+  "productsEmptyMessage": "מוצרים שתוסיפו יופיעו כאן.",
+
+  "cancel": "ביטול",
+  "productAdd": "הוספת מוצר",
+  "productEdit": "עריכה",
+  "productDelete": "מחיקה",
+  "productDeleteTitle": "למחוק את המוצר?",
+  "productDeleteMessage": "\"{title}\" יוסר. אי אפשר לבטל פעולה זו.",
+  "productDeleted": "המוצר נמחק",
+  "productSaved": "המוצר נשמר",
+  "productCreateTitle": "מוצר חדש",
+  "productEditTitle": "עריכת מוצר",
+  "productFieldTitle": "שם",
+  "productFieldPrice": "מחיר",
+  "productFieldDescription": "תיאור",
+  "productFieldCategory": "קטגוריה",
+  "productImagesTitle": "תמונות",
+  "productImageUrlLabel": "כתובת תמונה",
+  "productImageAdd": "הוספת תמונה",
+  "productImageRemove": "הסרת תמונה",
+  "productImagesRequired": "יש להוסיף לפחות תמונה אחת",
+  "productCategoriesEmpty": "אין קטגוריות עדיין, ולכן אי אפשר ליצור מוצר כרגע.",
+  "productSubmitCreate": "יצירת מוצר",
+  "productSubmitSave": "שמירת שינויים",
+  "productImageCounter": "תמונה {current} מתוך {total}"
 }

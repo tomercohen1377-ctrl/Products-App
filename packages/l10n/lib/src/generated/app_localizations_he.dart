@@ -103,4 +103,78 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get productsEmptyMessage => 'מוצרים שתוסיפו יופיעו כאן.';
+
+  @override
+  String get cancel => 'ביטול';
+
+  @override
+  String get productAdd => 'הוספת מוצר';
+
+  @override
+  String get productEdit => 'עריכה';
+
+  @override
+  String get productDelete => 'מחיקה';
+
+  @override
+  String get productDeleteTitle => 'למחוק את המוצר?';
+
+  @override
+  String productDeleteMessage(String title) {
+    return '\"$title\" יוסר. אי אפשר לבטל פעולה זו.';
+  }
+
+  @override
+  String get productDeleted => 'המוצר נמחק';
+
+  @override
+  String get productSaved => 'המוצר נשמר';
+
+  @override
+  String get productCreateTitle => 'מוצר חדש';
+
+  @override
+  String get productEditTitle => 'עריכת מוצר';
+
+  @override
+  String get productFieldTitle => 'שם';
+
+  @override
+  String get productFieldPrice => 'מחיר';
+
+  @override
+  String get productFieldDescription => 'תיאור';
+
+  @override
+  String get productFieldCategory => 'קטגוריה';
+
+  @override
+  String get productImagesTitle => 'תמונות';
+
+  @override
+  String get productImageUrlLabel => 'כתובת תמונה';
+
+  @override
+  String get productImageAdd => 'הוספת תמונה';
+
+  @override
+  String get productImageRemove => 'הסרת תמונה';
+
+  @override
+  String get productImagesRequired => 'יש להוסיף לפחות תמונה אחת';
+
+  @override
+  String get productCategoriesEmpty =>
+      'אין קטגוריות עדיין, ולכן אי אפשר ליצור מוצר כרגע.';
+
+  @override
+  String get productSubmitCreate => 'יצירת מוצר';
+
+  @override
+  String get productSubmitSave => 'שמירת שינויים';
+
+  @override
+  String productImageCounter(int current, int total) {
+    return 'תמונה $current מתוך $total';
+  }
 }

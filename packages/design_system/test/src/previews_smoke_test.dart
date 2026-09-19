@@ -1,9 +1,12 @@
 import 'package:design_system/src/widgets/app_banner.dart';
 import 'package:design_system/src/widgets/app_button.dart';
+import 'package:design_system/src/widgets/app_dropdown.dart';
 import 'package:design_system/src/widgets/app_loader.dart';
 import 'package:design_system/src/widgets/app_network_image.dart';
+import 'package:design_system/src/widgets/app_tag.dart';
 import 'package:design_system/src/widgets/app_text_field.dart';
 import 'package:design_system/src/widgets/async_content.dart';
+import 'package:design_system/src/widgets/confirm_dialog.dart';
 import 'package:design_system/src/widgets/empty_view.dart';
 import 'package:design_system/src/widgets/error_view.dart';
 import 'package:design_system/src/widgets/paginated_list.dart';
@@ -20,10 +23,13 @@ void main() {
   final previews = <String, Widget Function()>{
     'AppBanner': appBannerPreview,
     'AppButton': appButtonPreview,
+    'AppDropdown': appDropdownPreview,
     'AppLoader': appLoaderPreview,
     'AppNetworkImage': appNetworkImagePreview,
+    'AppTag': appTagPreview,
     'AppTextField': appTextFieldPreview,
     'AsyncContent': asyncContentPreview,
+    'ConfirmDialog': confirmDialogPreview,
     'EmptyView': emptyViewPreview,
     'ErrorView': errorViewPreview,
     'PaginatedList': paginatedListPreview,

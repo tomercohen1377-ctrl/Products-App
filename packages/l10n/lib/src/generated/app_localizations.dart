@@ -283,6 +283,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Products you add will show up here.'**
   String get productsEmptyMessage;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @productAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add product'**
+  String get productAdd;
+
+  /// No description provided for @productEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get productEdit;
+
+  /// No description provided for @productDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get productDelete;
+
+  /// No description provided for @productDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this product?'**
+  String get productDeleteTitle;
+
+  /// No description provided for @productDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{title}\" will be removed. This can\'t be undone.'**
+  String productDeleteMessage(String title);
+
+  /// No description provided for @productDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Product deleted'**
+  String get productDeleted;
+
+  /// No description provided for @productSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Product saved'**
+  String get productSaved;
+
+  /// No description provided for @productCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New product'**
+  String get productCreateTitle;
+
+  /// No description provided for @productEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit product'**
+  String get productEditTitle;
+
+  /// No description provided for @productFieldTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get productFieldTitle;
+
+  /// No description provided for @productFieldPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get productFieldPrice;
+
+  /// No description provided for @productFieldDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get productFieldDescription;
+
+  /// No description provided for @productFieldCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get productFieldCategory;
+
+  /// No description provided for @productImagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Images'**
+  String get productImagesTitle;
+
+  /// No description provided for @productImageUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Image URL'**
+  String get productImageUrlLabel;
+
+  /// No description provided for @productImageAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add image'**
+  String get productImageAdd;
+
+  /// No description provided for @productImageRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove image'**
+  String get productImageRemove;
+
+  /// No description provided for @productImagesRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least one image'**
+  String get productImagesRequired;
+
+  /// No description provided for @productCategoriesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no categories yet, so a product can\'t be created right now.'**
+  String get productCategoriesEmpty;
+
+  /// No description provided for @productSubmitCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create product'**
+  String get productSubmitCreate;
+
+  /// No description provided for @productSubmitSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save changes'**
+  String get productSubmitSave;
+
+  /// No description provided for @productImageCounter.
+  ///
+  /// In en, this message translates to:
+  /// **'Image {current} of {total}'**
+  String productImageCounter(int current, int total);
 }
 
 class _AppLocalizationsDelegate

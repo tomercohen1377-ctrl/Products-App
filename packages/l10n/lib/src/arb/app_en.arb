@@ -40,5 +40,31 @@
 
   "refresh": "Refresh",
   "productsEmptyTitle": "No products yet",
-  "productsEmptyMessage": "Products you add will show up here."
+  "productsEmptyMessage": "Products you add will show up here.",
+
+  "cancel": "Cancel",
+  "productAdd": "Add product",
+  "productEdit": "Edit",
+  "productDelete": "Delete",
+  "productDeleteTitle": "Delete this product?",
+  "productDeleteMessage": "\"{title}\" will be removed. This can't be undone.",
+  "@productDeleteMessage": {"placeholders": {"title": {"type": "String"}}},
+  "productDeleted": "Product deleted",
+  "productSaved": "Product saved",
+  "productCreateTitle": "New product",
+  "productEditTitle": "Edit product",
+  "productFieldTitle": "Title",
+  "productFieldPrice": "Price",
+  "productFieldDescription": "Description",
+  "productFieldCategory": "Category",
+  "productImagesTitle": "Images",
+  "productImageUrlLabel": "Image URL",
+  "productImageAdd": "Add image",
+  "productImageRemove": "Remove image",
+  "productImagesRequired": "Add at least one image",
+  "productCategoriesEmpty": "There are no categories yet, so a product can't be created right now.",
+  "productSubmitCreate": "Create product",
+  "productSubmitSave": "Save changes",
+  "productImageCounter": "Image {current} of {total}",
+  "@productImageCounter": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}}
 }
