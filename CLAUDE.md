@@ -13,6 +13,7 @@ Flutter products app on the Platzi Fake Store API (`https://api.escuelajs.co/api
 | Regenerate code (DTOs) | `dart run build_runner build --delete-conflicting-outputs` (inside the package) |
 | Regenerate strings (after editing ARB) | `flutter gen-l10n` then `dart format packages/l10n` (inside `packages/l10n`) |
 | Live end-to-end (real API + keychain) | `flutter test integration_test/live_auth_test.dart -d <simulator-or-device>` |
+| Deck performance timeline (device, profile mode) | `flutter drive --profile -d <device> --driver=test_driver/perf_driver.dart --target=integration_test/deck_performance_test.dart` |
 | Test user | `john@mail.com` / `changeme` |
 
 ## Layout
@@ -35,3 +36,5 @@ Rules in `.claude/rules/` are path-scoped and load automatically:
 - Small, reviewable commits: `type(scope): summary` (e.g. `feat(auth): single-flight token refresh`). Every commit analyzes clean and keeps tests green.
 - No duplicated code: before writing a helper, widget or fixture, check `core`, `design_system` and the package's `testing.dart`.
 - Prefer a maintained library over hand-rolled code. The one deliberate exception is the swipe-deck animation, which must stay hand-built.
+- Verify against the running app, not only unit tests: end-to-end flows in `test/`, live flows in `integration_test/`. When a test passes on the first run, break the code on purpose to confirm it can fail.
+- The API is shared and volatile (data can be empty or junk); never assume specific products or categories exist in tests against it.
