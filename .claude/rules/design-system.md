@@ -15,4 +15,4 @@ Source of truth: `packages/design_system/lib/`.
 - The developer-tools sheet (`lib/app/dev/`) is debug-only and intentionally not localized; nothing else is exempt.
 - Layout must work in RTL (English and Hebrew ship): `EdgeInsetsDirectional`, `AlignmentDirectional`, `BorderRadiusDirectional`, `start`/`end` instead of `left`/`right`, and icons that imply direction must mirror.
 - Support dark theme and large text: no fixed-height text containers; verify at 1.5x scale.
-- Images always go through `AppNetworkImage` (cache, size-aware decode, error fallback); the API returns some dead image URLs.
+- Images always go through `AppNetworkImage` (size-aware decode, fade-in, error fallback); the API returns some dead image URLs.

@@ -1,10 +1,9 @@
 import 'package:auth/src/presentation/account/account_sheet.dart';
 import 'package:auth/src/presentation/login/login_content.dart';
 import 'package:auth/src/presentation/splash/splash_screen.dart';
+import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../support/pump.dart';
 
 /// Guards the "every widget has a preview" rule: each preview function must
 /// build and lay out without exceptions, in both directions.

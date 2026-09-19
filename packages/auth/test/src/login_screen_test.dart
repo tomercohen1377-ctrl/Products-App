@@ -1,10 +1,11 @@
 import 'package:auth/src/presentation/login/login_screen.dart';
 import 'package:auth/testing.dart';
 import 'package:core/core.dart';
+import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../support/pump.dart';
+import '../support/auth_blocs.dart';
 
 void main() {
   late AuthBlocs blocs;

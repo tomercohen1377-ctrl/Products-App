@@ -9,10 +9,9 @@ import 'package:design_system/src/widgets/error_view.dart';
 import 'package:design_system/src/widgets/paginated_list.dart';
 import 'package:design_system/src/widgets/price_label.dart';
 import 'package:design_system/src/widgets/status_message.dart';
+import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../support/pump.dart';
 
 /// Guards the "every widget has a preview" rule: each preview function must
 /// build and lay out without exceptions in a phone-width, unbounded-height

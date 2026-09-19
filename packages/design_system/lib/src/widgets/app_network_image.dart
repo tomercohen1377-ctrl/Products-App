@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:design_system/src/previews/app_previews.dart';
 import 'package:design_system/src/theme/theme_context.dart';
 import 'package:design_system/src/tokens/ds_corner_radius.dart';
@@ -7,9 +6,9 @@ import 'package:design_system/src/tokens/ds_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:l10n/l10n.dart';
 
-/// The only way the app shows a remote image: cached on disk, decoded at the
-/// size it is displayed (not full resolution), with a fallback for the dead
-/// or missing URLs this API is known to return.
+/// The only way the app shows a remote image: decoded at the size it is
+/// displayed (not at full resolution), faded in over a placeholder, with a
+/// fallback for the dead or missing URLs this API is known to return.
 class AppNetworkImage extends StatelessWidget {
   const AppNetworkImage({
     required this.url,
@@ -35,13 +34,25 @@ class AppNetworkImage extends StatelessWidget {
               final width = constraints.hasBoundedWidth
                   ? (constraints.maxWidth * pixelRatio).round()
                   : null;
-              return CachedNetworkImage(
-                imageUrl: url,
-                fit: fit,
-                memCacheWidth: width,
-                fadeInDuration: const Duration(milliseconds: 150),
-                placeholder: (_, _) => const _ImageBox(),
-                errorWidget: (_, _, _) => const _ImageFallback(),
+              return Stack(
+                fit: StackFit.expand,
+                children: [
+                  const _ImageBox(),
+                  Image.network(
+                    url,
+                    fit: fit,
+                    cacheWidth: width,
+                    frameBuilder: (context, child, frame, loadedSync) =>
+                        loadedSync
+                        ? child
+                        : AnimatedOpacity(
+                            opacity: frame == null ? 0 : 1,
+                            duration: const Duration(milliseconds: 150),
+                            child: child,
+                          ),
+                    errorBuilder: (_, _, _) => const _ImageFallback(),
+                  ),
+                ],
               );
             },
           );

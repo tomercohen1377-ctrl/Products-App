@@ -2,10 +2,9 @@ import 'package:auth/src/presentation/login/login_content.dart';
 import 'package:auth/src/presentation/login/login_intent.dart';
 import 'package:auth/src/presentation/login/login_state.dart';
 import 'package:core/core.dart';
+import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import '../support/pump.dart';
 
 void main() {
   Future<List<LoginIntent>> pump(

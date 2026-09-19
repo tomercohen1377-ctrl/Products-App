@@ -1,9 +1,10 @@
 import 'package:auth/auth.dart';
 import 'package:auth/testing.dart';
+import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../support/pump.dart';
+import '../support/auth_blocs.dart';
 
 void main() {
   testWidgets('shows who is signed in and signs out', (tester) async {
