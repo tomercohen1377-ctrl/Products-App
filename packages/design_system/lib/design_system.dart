@@ -13,6 +13,7 @@ export 'src/tokens/ds_dimensions.dart';
 export 'src/tokens/ds_elevation.dart';
 export 'src/tokens/ds_padding.dart';
 export 'src/tokens/ds_spacing.dart';
+export 'src/widgets/app_banner.dart';
 export 'src/widgets/app_button.dart';
 export 'src/widgets/app_loader.dart';
 export 'src/widgets/app_network_image.dart';

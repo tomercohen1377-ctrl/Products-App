@@ -1,3 +1,4 @@
+import 'package:design_system/src/widgets/app_banner.dart';
 import 'package:design_system/src/widgets/app_button.dart';
 import 'package:design_system/src/widgets/app_loader.dart';
 import 'package:design_system/src/widgets/app_network_image.dart';
@@ -18,6 +19,7 @@ import '../support/pump.dart';
 /// canvas, in both directions.
 void main() {
   final previews = <String, Widget Function()>{
+    'AppBanner': appBannerPreview,
     'AppButton': appButtonPreview,
     'AppLoader': appLoaderPreview,
     'AppNetworkImage': appNetworkImagePreview,
