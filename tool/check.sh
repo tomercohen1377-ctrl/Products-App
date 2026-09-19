@@ -5,6 +5,9 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+echo "==> dart format (check)"
+dart format --output=none --set-exit-if-changed lib test packages
+
 echo "==> flutter analyze (workspace)"
 flutter analyze
 
