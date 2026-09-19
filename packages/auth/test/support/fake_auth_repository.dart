@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auth/auth.dart';
 import 'package:auth/testing.dart';
 import 'package:core/core.dart';
@@ -8,6 +10,10 @@ class FakeAuthRepository implements AuthRepository {
   Result<User> loginResult = const Success(userFixture);
   Result<User> currentUserResult = const Success(userFixture);
   int logoutCalls = 0;
+  int loginCalls = 0;
+
+  /// When set, `login` waits for it, so tests can hold a submit in flight.
+  Completer<void>? loginGate;
   ({String email, String password})? lastLogin;
 
   @override
@@ -15,7 +21,9 @@ class FakeAuthRepository implements AuthRepository {
     required String email,
     required String password,
   }) async {
+    loginCalls++;
     lastLogin = (email: email, password: password);
+    await loginGate?.future;
     return loginResult;
   }
 

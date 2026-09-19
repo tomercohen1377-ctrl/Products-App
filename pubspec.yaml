@@ -30,9 +30,14 @@ dependencies:
     path: packages/auth
   products:
     path: packages/products
+  flutter_bloc: 9.1.1
+  get_it: 9.2.1
+  go_router: 18.0.1
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: 6.0.0
 

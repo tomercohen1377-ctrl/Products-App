@@ -66,4 +66,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fieldInvalidUrl => 'Enter a valid http(s) link';
+
+  @override
+  String get productsTitle => 'Products';
+
+  @override
+  String get loginTitle => 'Welcome back';
+
+  @override
+  String get loginSubtitle => 'Sign in to manage your products';
+
+  @override
+  String get loginEmailLabel => 'Email';
+
+  @override
+  String get loginPasswordLabel => 'Password';
+
+  @override
+  String get loginSubmit => 'Sign in';
+
+  @override
+  String get loginInvalidCredentials => 'Incorrect email or password.';
+
+  @override
+  String get accountTooltip => 'Account';
+
+  @override
+  String get accountSignedInAs => 'Signed in as';
+
+  @override
+  String get accountSignOut => 'Sign out';
 }

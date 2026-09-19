@@ -64,4 +64,34 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get fieldInvalidUrl => 'הזינו קישור http(s) תקין';
+
+  @override
+  String get productsTitle => 'מוצרים';
+
+  @override
+  String get loginTitle => 'ברוכים השבים';
+
+  @override
+  String get loginSubtitle => 'התחברו כדי לנהל את המוצרים שלכם';
+
+  @override
+  String get loginEmailLabel => 'אימייל';
+
+  @override
+  String get loginPasswordLabel => 'סיסמה';
+
+  @override
+  String get loginSubmit => 'התחברות';
+
+  @override
+  String get loginInvalidCredentials => 'אימייל או סיסמה שגויים.';
+
+  @override
+  String get accountTooltip => 'חשבון';
+
+  @override
+  String get accountSignedInAs => 'מחובר בתור';
+
+  @override
+  String get accountSignOut => 'התנתקות';
 }

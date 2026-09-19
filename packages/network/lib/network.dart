@@ -1,6 +1,7 @@
 library;
 
-export 'package:dio/dio.dart' show Dio, Options;
+export 'package:dio/dio.dart'
+    show Dio, DioException, HttpClientAdapter, Options;
 
 export 'src/api_client.dart';
 export 'src/auth/session_contracts.dart';

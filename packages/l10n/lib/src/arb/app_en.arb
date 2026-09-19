@@ -25,5 +25,16 @@
   "fieldInvalidEmail": "Enter a valid email address",
   "fieldInvalidNumber": "Enter a valid number",
   "fieldNotPositive": "Must be greater than zero",
-  "fieldInvalidUrl": "Enter a valid http(s) link"
+  "fieldInvalidUrl": "Enter a valid http(s) link",
+
+  "productsTitle": "Products",
+  "loginTitle": "Welcome back",
+  "loginSubtitle": "Sign in to manage your products",
+  "loginEmailLabel": "Email",
+  "loginPasswordLabel": "Password",
+  "loginSubmit": "Sign in",
+  "loginInvalidCredentials": "Incorrect email or password.",
+  "accountTooltip": "Account",
+  "accountSignedInAs": "Signed in as",
+  "accountSignOut": "Sign out"
 }

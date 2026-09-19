@@ -12,6 +12,7 @@ Flutter products app on the Platzi Fake Store API (`https://api.escuelajs.co/api
 | Widget previews | `flutter widget-preview start` |
 | Regenerate code (DTOs) | `dart run build_runner build --delete-conflicting-outputs` (inside the package) |
 | Regenerate strings (after editing ARB) | `flutter gen-l10n` then `dart format packages/l10n` (inside `packages/l10n`) |
+| Live end-to-end (real API + keychain) | `flutter test integration_test/live_auth_test.dart -d <simulator-or-device>` |
 | Test user | `john@mail.com` / `changeme` |
 
 ## Layout

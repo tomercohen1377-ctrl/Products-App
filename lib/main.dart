@@ -1,16 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mylo_products/app/app.dart';
+import 'package:mylo_products/app/bootstrap.dart';
 
 void main() {
-  runApp(const MyloApp());
-}
-
-class MyloApp extends StatelessWidget {
-  const MyloApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Mylo'))),
-    );
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyloApp(getIt: bootstrap()));
 }

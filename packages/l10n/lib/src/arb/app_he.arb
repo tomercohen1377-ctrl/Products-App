@@ -20,5 +20,16 @@
   "fieldInvalidEmail": "הזינו כתובת אימייל תקינה",
   "fieldInvalidNumber": "הזינו מספר תקין",
   "fieldNotPositive": "הערך חייב להיות גדול מאפס",
-  "fieldInvalidUrl": "הזינו קישור http(s) תקין"
+  "fieldInvalidUrl": "הזינו קישור http(s) תקין",
+
+  "productsTitle": "מוצרים",
+  "loginTitle": "ברוכים השבים",
+  "loginSubtitle": "התחברו כדי לנהל את המוצרים שלכם",
+  "loginEmailLabel": "אימייל",
+  "loginPasswordLabel": "סיסמה",
+  "loginSubmit": "התחברות",
+  "loginInvalidCredentials": "אימייל או סיסמה שגויים.",
+  "accountTooltip": "חשבון",
+  "accountSignedInAs": "מחובר בתור",
+  "accountSignOut": "התנתקות"
 }
