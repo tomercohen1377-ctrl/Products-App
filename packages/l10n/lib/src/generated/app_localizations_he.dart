@@ -177,4 +177,38 @@ class AppLocalizationsHe extends AppLocalizations {
   String productImageCounter(int current, int total) {
     return 'תמונה $current מתוך $total';
   }
+
+  @override
+  String get productsViewList => 'רשימה';
+
+  @override
+  String get productsViewDeck => 'חפיסה';
+
+  @override
+  String get deckLike => 'אהבתי';
+
+  @override
+  String get deckSkip => 'דלג';
+
+  @override
+  String deckLikedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'אהבתם $count מוצרים',
+      one: 'אהבתם מוצר אחד',
+      zero: 'אין אהבתי עדיין',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deckEmptyTitle => 'ראיתם הכול';
+
+  @override
+  String get deckEmptyMessage =>
+      'זה היה המוצר האחרון. התחילו מחדש כדי לעבור עליהם שוב.';
+
+  @override
+  String get deckStartOver => 'התחלה מחדש';
 }

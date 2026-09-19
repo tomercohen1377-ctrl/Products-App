@@ -21,14 +21,19 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(context.l10n.productsTitle), actions: actions),
-    floatingActionButton: Builder(
-      builder: (context) => FloatingActionButton.extended(
-        onPressed: () =>
-            context.read<ProductsBloc>().add(const AddProductRequested()),
-        icon: const Icon(Icons.add_rounded),
-        label: Text(context.l10n.productAdd),
-      ),
+    appBar: AppBar(
+      title: Text(context.l10n.productsTitle),
+      actions: [
+        Builder(
+          builder: (context) => IconButton(
+            tooltip: context.l10n.productAdd,
+            icon: const Icon(Icons.add_rounded),
+            onPressed: () =>
+                context.read<ProductsBloc>().add(const AddProductRequested()),
+          ),
+        ),
+        ...actions,
+      ],
     ),
     body: MviView<ProductsBloc, ProductsState, ProductsEffect>(
       onEffect: (context, effect) => switch (effect) {

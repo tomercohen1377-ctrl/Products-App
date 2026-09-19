@@ -421,6 +421,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Image {current} of {total}'**
   String productImageCounter(int current, int total);
+
+  /// No description provided for @productsViewList.
+  ///
+  /// In en, this message translates to:
+  /// **'List'**
+  String get productsViewList;
+
+  /// No description provided for @productsViewDeck.
+  ///
+  /// In en, this message translates to:
+  /// **'Deck'**
+  String get productsViewDeck;
+
+  /// No description provided for @deckLike.
+  ///
+  /// In en, this message translates to:
+  /// **'Like'**
+  String get deckLike;
+
+  /// No description provided for @deckSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get deckSkip;
+
+  /// No description provided for @deckLikedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No likes yet} =1{1 liked} other{{count} liked}}'**
+  String deckLikedCount(int count);
+
+  /// No description provided for @deckEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve seen everything'**
+  String get deckEmptyTitle;
+
+  /// No description provided for @deckEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'That was the last product. Start over to go through them again.'**
+  String get deckEmptyMessage;
+
+  /// No description provided for @deckStartOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get deckStartOver;
 }
 
 class _AppLocalizationsDelegate

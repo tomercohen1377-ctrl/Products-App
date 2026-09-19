@@ -66,5 +66,15 @@
   "productSubmitCreate": "Create product",
   "productSubmitSave": "Save changes",
   "productImageCounter": "Image {current} of {total}",
-  "@productImageCounter": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}}
+  "@productImageCounter": {"placeholders": {"current": {"type": "int"}, "total": {"type": "int"}}},
+
+  "productsViewList": "List",
+  "productsViewDeck": "Deck",
+  "deckLike": "Like",
+  "deckSkip": "Skip",
+  "deckLikedCount": "{count, plural, =0{No likes yet} =1{1 liked} other{{count} liked}}",
+  "@deckLikedCount": {"placeholders": {"count": {"type": "int"}}},
+  "deckEmptyTitle": "You've seen everything",
+  "deckEmptyMessage": "That was the last product. Start over to go through them again.",
+  "deckStartOver": "Start over"
 }

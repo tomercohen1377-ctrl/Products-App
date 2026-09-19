@@ -179,4 +179,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String productImageCounter(int current, int total) {
     return 'Image $current of $total';
   }
+
+  @override
+  String get productsViewList => 'List';
+
+  @override
+  String get productsViewDeck => 'Deck';
+
+  @override
+  String get deckLike => 'Like';
+
+  @override
+  String get deckSkip => 'Skip';
+
+  @override
+  String deckLikedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count liked',
+      one: '1 liked',
+      zero: 'No likes yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get deckEmptyTitle => 'You\'ve seen everything';
+
+  @override
+  String get deckEmptyMessage =>
+      'That was the last product. Start over to go through them again.';
+
+  @override
+  String get deckStartOver => 'Start over';
 }

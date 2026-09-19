@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:products/src/presentation/list/products_content.dart';
 import 'package:products/src/presentation/list/products_intent.dart';
 import 'package:products/src/presentation/list/products_state.dart';
+import 'package:products/src/presentation/widgets/product_deck_card.dart';
 import 'package:products/src/presentation/widgets/product_tile.dart';
 
 import '../support/fake_products_repository.dart';
@@ -132,6 +133,36 @@ void main() {
     await tester.pump();
 
     expect(intents, contains(const ProductsNextPageRequested()));
+  });
+
+  testWidgets('the view toggle switches between the list and the deck', (
+    tester,
+  ) async {
+    final intents = await pump(tester, ready());
+    await tester.pump(const Duration(milliseconds: 250));
+    expect(find.byType(ProductTile), findsWidgets);
+    expect(find.byType(ProductDeckCard), findsNothing);
+
+    await tester.tap(find.text('Deck'));
+
+    expect(intents, [const ProductsViewModeChanged(ProductsViewMode.deck)]);
+  });
+
+  testWidgets('in deck mode the products are cards', (tester) async {
+    await pump(tester, ready().copyWith(viewMode: ProductsViewMode.deck));
+    await tester.pump(const Duration(milliseconds: 250));
+
+    expect(find.byType(ProductDeckCard), findsWidgets);
+    expect(find.byType(ProductTile), findsNothing);
+  });
+
+  testWidgets('no toggle while loading, failed or empty', (tester) async {
+    await pump(tester, const ProductsState());
+    expect(find.text('Deck'), findsNothing);
+
+    await pump(tester, ready(count: 0));
+    await tester.pump(const Duration(milliseconds: 250));
+    expect(find.text('Deck'), findsNothing);
   });
 
   testWidgets('never asks for more once the end is reached', (tester) async {

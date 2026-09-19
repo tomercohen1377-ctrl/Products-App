@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
 import 'package:core/core.dart';
+import 'package:design_system/design_system.dart' show SwipeDirection;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:products/products.dart';
 import 'package:products/src/presentation/list/products_bloc.dart';
@@ -423,5 +424,143 @@ void main() {
 
       expect(effects, [const OpenProductForm()]);
     });
+  });
+
+  group('deck', () {
+    Future<ProductsBloc> started({int serverSize = 8}) async {
+      repository.server = makeProducts(serverSize);
+      final bloc = build()..add(const ProductsStarted());
+      await pumpEventQueue();
+      addTearDown(bloc.close);
+      return bloc;
+    }
+
+    test('starts in list mode and can switch to the deck and back', () async {
+      final bloc = await started();
+      expect(bloc.state.viewMode, ProductsViewMode.list);
+
+      bloc.add(const ProductsViewModeChanged(ProductsViewMode.deck));
+      await pumpEventQueue();
+      expect(bloc.state.viewMode, ProductsViewMode.deck);
+
+      bloc.add(const ProductsViewModeChanged(ProductsViewMode.list));
+      await pumpEventQueue();
+      expect(bloc.state.viewMode, ProductsViewMode.list);
+    });
+
+    test(
+      'swiping right likes and dismisses, swiping left only dismisses',
+      () async {
+        final bloc = await started();
+        final items = bloc.state.items;
+
+        bloc.add(ProductSwiped(items[0], SwipeDirection.right));
+        bloc.add(ProductSwiped(items[1], SwipeDirection.left));
+        await pumpEventQueue();
+
+        expect(bloc.state.likedIds, {items[0].id});
+        expect(bloc.state.dismissedIds, {items[0].id, items[1].id});
+        expect(bloc.state.deckItems.map((p) => p.id), [items[2].id]);
+      },
+    );
+
+    test(
+      'the deck is exhausted only when all is seen and nothing more can load',
+      () async {
+        final bloc = await started(serverSize: 2);
+        expect(bloc.state.hasReachedEnd, isTrue);
+        expect(bloc.state.isDeckExhausted, isFalse);
+
+        for (final product in bloc.state.items) {
+          bloc.add(ProductSwiped(product, SwipeDirection.left));
+        }
+        await pumpEventQueue();
+
+        expect(bloc.state.isDeckExhausted, isTrue);
+      },
+    );
+
+    test(
+      'everything swiped while more can be loaded is not exhausted yet',
+      () async {
+        final bloc = await started(serverSize: 8);
+        for (final product in bloc.state.items) {
+          bloc.add(ProductSwiped(product, SwipeDirection.left));
+        }
+        await pumpEventQueue();
+
+        expect(bloc.state.deckItems, isEmpty);
+        expect(bloc.state.hasReachedEnd, isFalse);
+        expect(
+          bloc.state.isDeckExhausted,
+          isFalse,
+          reason: 'the next page is coming',
+        );
+      },
+    );
+
+    test('starting over brings the cards back and keeps the likes', () async {
+      final bloc = await started(serverSize: 2);
+      for (final product in bloc.state.items) {
+        bloc.add(ProductSwiped(product, SwipeDirection.right));
+      }
+      await pumpEventQueue();
+
+      bloc.add(const ProductsDeckRestarted());
+      await pumpEventQueue();
+
+      expect(bloc.state.deckItems, hasLength(2));
+      expect(bloc.state.likedIds, hasLength(2));
+    });
+
+    test('the deck state survives refreshing the list', () async {
+      final bloc = await started();
+      final first = bloc.state.items.first;
+      bloc
+        ..add(const ProductsViewModeChanged(ProductsViewMode.deck))
+        ..add(ProductSwiped(first, SwipeDirection.right));
+      await pumpEventQueue();
+
+      bloc.add(const ProductsRefreshed());
+      await pumpEventQueue();
+
+      expect(bloc.state.viewMode, ProductsViewMode.deck);
+      expect(bloc.state.likedIds, {first.id});
+      expect(bloc.state.dismissedIds, {first.id});
+    });
+
+    test('and survives retrying a failed first load', () async {
+      repository.queued.add(const Failed(NetworkFailure()));
+      final bloc = build()
+        ..add(const ProductsViewModeChanged(ProductsViewMode.deck))
+        ..add(const ProductsStarted());
+      addTearDown(bloc.close);
+      await pumpEventQueue();
+      expect(bloc.state.blockingFailure, isNotNull);
+
+      repository.server = makeProducts(3);
+      bloc.add(const ProductsStarted());
+      await pumpEventQueue();
+
+      expect(bloc.state.viewMode, ProductsViewMode.deck);
+      expect(bloc.state.items, hasLength(3));
+    });
+
+    test(
+      'a deleted product leaves the deck, the likes and the dismissed set',
+      () async {
+        final bloc = await started();
+        final liked = bloc.state.items.first;
+        bloc.add(ProductSwiped(liked, SwipeDirection.right));
+        await pumpEventQueue();
+
+        repository.publish(ProductDeleted(liked.id));
+        await pumpEventQueue();
+
+        expect(bloc.state.likedIds, isEmpty);
+        expect(bloc.state.dismissedIds, isEmpty);
+        expect(bloc.state.items.any((p) => p.id == liked.id), isFalse);
+      },
+    );
   });
 }

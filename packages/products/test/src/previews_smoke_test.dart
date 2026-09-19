@@ -1,18 +1,31 @@
 import 'package:design_system/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:products/src/presentation/deck/product_deck_view.dart';
 import 'package:products/src/presentation/detail/product_detail_content.dart';
 import 'package:products/src/presentation/form/product_form_content.dart';
 import 'package:products/src/presentation/list/products_content.dart';
+import 'package:products/src/presentation/widgets/product_deck_card.dart';
 import 'package:products/src/presentation/widgets/product_image_editor.dart';
 import 'package:products/src/presentation/widgets/product_image_gallery.dart';
 import 'package:products/src/presentation/widgets/product_tile.dart';
+import 'package:products/src/presentation/widgets/products_view_toggle.dart';
+import 'package:products/src/presentation/widgets/swipe_stamp.dart';
 
 /// Guards the "every widget has a preview" rule: each preview function must
 /// build and lay out without exceptions, in both directions.
 void main() {
   final previews = <String, Widget Function()>{
     'ProductTile': productTilePreview,
+    'ProductDeckCard': productDeckCardPreview,
+    'SwipeStamp': swipeStampPreview,
+    'ProductsViewToggle': productsViewTogglePreview,
+    'ProductsContent deck': productsContentDeckPreview,
+    'ProductDeckView': productDeckViewPreview,
+    'ProductDeckView fresh': productDeckViewFreshPreview,
+    'ProductDeckView failed': productDeckViewFailedPreview,
+    'ProductDeckView exhausted': productDeckViewExhaustedPreview,
+    'ProductDeckView waiting': productDeckViewWaitingPreview,
     'ProductImageGallery': productImageGalleryPreview,
     'ProductImageGallery empty': productImageGalleryEmptyPreview,
     'ProductImageEditor': productImageEditorPreview,

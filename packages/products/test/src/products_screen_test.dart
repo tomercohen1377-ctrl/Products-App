@@ -53,7 +53,7 @@ void main() {
 
     expect(find.text('Products'), findsOneWidget);
     expect(find.byIcon(Icons.star), findsOneWidget);
-    expect(find.text('Add product'), findsOneWidget);
+    expect(find.byTooltip('Add product'), findsOneWidget);
     expect(find.byType(ProductTile), findsNWidgets(5));
   });
 

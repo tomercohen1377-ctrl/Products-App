@@ -3,9 +3,11 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:l10n/l10n.dart';
 import 'package:products/src/domain/entities/product.dart';
+import 'package:products/src/presentation/deck/product_deck_view.dart';
 import 'package:products/src/presentation/list/products_intent.dart';
 import 'package:products/src/presentation/list/products_state.dart';
 import 'package:products/src/presentation/widgets/product_tile.dart';
+import 'package:products/src/presentation/widgets/products_view_toggle.dart';
 import 'package:products/testing.dart';
 
 /// The paged list. Pure: renders [state] and reports [onIntent].
@@ -28,43 +30,59 @@ class ProductsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return AsyncContent(
-      isLoading: state.isInitialLoading,
-      failure: state.blockingFailure,
-      isEmpty: state.isEmpty,
-      onRetry: () => onIntent(const ProductsStarted()),
-      empty: EmptyView(
-        title: l10n.productsEmptyTitle,
-        message: l10n.productsEmptyMessage,
-        action: AppButton(
-          label: l10n.refresh,
-          variant: AppButtonVariant.secondary,
-          expand: false,
-          onPressed: () => onIntent(const ProductsStarted()),
+    final list = state.viewMode == ProductsViewMode.list;
+    return Column(
+      children: [
+        if (state.phase == ProductsPhase.ready && state.items.isNotEmpty)
+          Padding(
+            padding: const EdgeInsetsDirectional.only(
+              start: DSSpacing.m,
+              end: DSSpacing.m,
+              top: DSSpacing.s,
+            ),
+            child: ProductsViewToggle(
+              mode: state.viewMode,
+              onChanged: (mode) => onIntent(ProductsViewModeChanged(mode)),
+            ),
+          ),
+        Expanded(
+          child: AsyncContent(
+            isLoading: state.isInitialLoading,
+            failure: state.blockingFailure,
+            isEmpty: state.isEmpty,
+            onRetry: () => onIntent(const ProductsStarted()),
+            empty: EmptyView(
+              title: l10n.productsEmptyTitle,
+              message: l10n.productsEmptyMessage,
+              action: AppButton(
+                label: l10n.refresh,
+                variant: AppButtonVariant.secondary,
+                expand: false,
+                onPressed: () => onIntent(const ProductsStarted()),
+              ),
+            ),
+            child: list
+                ? PaginatedList(
+                    itemCount: state.items.length,
+                    itemBuilder: (context, index) {
+                      final product = state.items[index];
+                      return ProductTile(
+                        product: product,
+                        onTap: () => onIntent(ProductSelected(product)),
+                      );
+                    },
+                    onLoadMore: () =>
+                        onIntent(const ProductsNextPageRequested()),
+                    hasReachedEnd: state.hasReachedEnd,
+                    isLoadingMore: state.isLoadingMore,
+                    loadMoreFailure: state.loadMoreFailure,
+                    onRefresh: onRefresh,
+                    padding: const EdgeInsetsDirectional.all(DSSpacing.m),
+                  )
+                : ProductDeckView(state: state, onIntent: onIntent),
+          ),
         ),
-      ),
-      child: PaginatedList(
-        itemCount: state.items.length,
-        itemBuilder: (context, index) {
-          final product = state.items[index];
-          return ProductTile(
-            product: product,
-            onTap: () => onIntent(ProductSelected(product)),
-          );
-        },
-        onLoadMore: () => onIntent(const ProductsNextPageRequested()),
-        hasReachedEnd: state.hasReachedEnd,
-        isLoadingMore: state.isLoadingMore,
-        loadMoreFailure: state.loadMoreFailure,
-        onRefresh: onRefresh,
-        // Bottom room so the add button never hides the last product.
-        padding: const EdgeInsetsDirectional.only(
-          start: DSSpacing.m,
-          end: DSSpacing.m,
-          top: DSSpacing.m,
-          bottom: DSDimensions.buttonHeight + DSSpacing.xxl,
-        ),
-      ),
+      ],
     );
   }
 }
@@ -115,4 +133,9 @@ Widget productsContentFailedPreview() => _content(
     phase: ProductsPhase.failure,
     failure: ServerFailure(statusCode: 503),
   ),
+);
+
+@AppPreviews('ProductsContent: deck mode')
+Widget productsContentDeckPreview() => _content(
+  _ready(hasReachedEnd: true).copyWith(viewMode: ProductsViewMode.deck),
 );

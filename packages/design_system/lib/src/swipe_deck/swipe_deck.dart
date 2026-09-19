@@ -10,6 +10,7 @@ import 'package:design_system/src/theme/theme_context.dart';
 import 'package:design_system/src/tokens/ds_corner_radius.dart';
 import 'package:design_system/src/tokens/ds_spacing.dart';
 import 'package:flutter/foundation.dart' show ValueListenable;
+import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter/scheduler.dart';
@@ -404,6 +405,9 @@ class _SwipeDeckState<T> extends State<SwipeDeck<T>>
         },
         child: GestureDetector(
           behavior: HitTestBehavior.opaque,
+          // From the touch-down point, so the card tracks the finger exactly
+          // instead of lagging by the touch slop when the drag starts.
+          dragStartBehavior: DragStartBehavior.down,
           onTap: widget.onTap == null || _motion != null
               ? null
               : () => widget.onTap!(item),

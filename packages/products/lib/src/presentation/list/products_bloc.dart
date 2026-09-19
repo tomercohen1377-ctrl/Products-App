@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:core/core.dart';
+import 'package:design_system/design_system.dart' show SwipeDirection;
 import 'package:flutter_bloc/flutter_bloc.dart' show Emitter;
 import 'package:products/src/domain/entities/product.dart';
 import 'package:products/src/domain/entities/product_change.dart';
@@ -26,6 +27,13 @@ class ProductsBloc
       (intent, _) => emitEffect(OpenProductDetail(intent.product)),
     );
     on<AddProductRequested>((intent, _) => emitEffect(const OpenProductForm()));
+    on<ProductsViewModeChanged>(
+      (intent, emit) => emit(state.copyWith(viewMode: intent.mode)),
+    );
+    on<ProductSwiped>(_onSwiped);
+    on<ProductsDeckRestarted>(
+      (intent, emit) => emit(state.copyWith(dismissedIds: {})),
+    );
 
     _changes = _repository.changes.listen(
       (change) => add(ProductsChangeReceived(change)),
@@ -47,13 +55,13 @@ class ProductsBloc
     Emitter<ProductsState> emit,
   ) async {
     _epoch++;
-    emit(const ProductsState());
+    emit(_reset());
     final result = await _repository.getProducts(offset: 0, limit: pageSize);
     switch (result) {
       case Success(:final value):
         emit(_firstPage(value));
       case Failed(:final failure):
-        emit(ProductsState(phase: ProductsPhase.failure, failure: failure));
+        emit(_reset().copyWith(phase: ProductsPhase.failure, failure: failure));
     }
   }
 
@@ -112,6 +120,18 @@ class ProductsBloc
     }
   }
 
+  void _onSwiped(ProductSwiped intent, Emitter<ProductsState> emit) {
+    final id = intent.product.id;
+    emit(
+      state.copyWith(
+        dismissedIds: {...state.dismissedIds, id},
+        likedIds: intent.direction == SwipeDirection.right
+            ? {...state.likedIds, id}
+            : state.likedIds,
+      ),
+    );
+  }
+
   void _onChange(ProductsChangeReceived intent, Emitter<ProductsState> emit) {
     if (state.phase != ProductsPhase.ready) return;
     switch (intent.change) {
@@ -133,16 +153,30 @@ class ProductsBloc
           state.copyWith(
             items: remaining,
             nextOffset: state.nextOffset > 0 ? state.nextOffset - 1 : 0,
+            likedIds: {...state.likedIds}..remove(id),
+            dismissedIds: {...state.dismissedIds}..remove(id),
           ),
         );
     }
   }
 
-  ProductsState _firstPage(List<Product> page) => ProductsState(
+  /// The loading state with nothing loaded, keeping what belongs to the user's
+  /// session rather than the server's list (view mode, likes, dismissed cards).
+  ProductsState _reset() => ProductsState(
+    viewMode: state.viewMode,
+    likedIds: state.likedIds,
+    dismissedIds: state.dismissedIds,
+  );
+
+  ProductsState _firstPage(List<Product> page) => state.copyWith(
     phase: ProductsPhase.ready,
     items: page,
     nextOffset: page.length,
+    failure: null,
+    isRefreshing: false,
+    isLoadingMore: false,
     hasReachedEnd: page.length < pageSize,
+    loadMoreFailure: null,
   );
 
   @override

@@ -422,6 +422,29 @@ void main() {
       expect(tapped, [1]);
     });
 
+    testWidgets(
+      'a card tracks the finger exactly even when it can also be tapped',
+      (tester) async {
+        await pumpDeck(
+          tester,
+          _Host(controller: controller, log: log, onTap: (_) {}),
+        );
+        final rest = tester.getCenter(card(1));
+
+        final gesture = await tester.startGesture(rest);
+        await gesture.moveBy(const Offset(90, 0));
+        await tester.pump();
+
+        expect(
+          tester.getCenter(card(1)).dx - rest.dx,
+          closeTo(90, 1),
+          reason: 'no touch-slop lag at the start of the drag',
+        );
+        await gesture.cancel();
+        await tester.pumpAndSettle();
+      },
+    );
+
     testWidgets('a drag is not a tap', (tester) async {
       final tapped = <int>[];
       await pumpDeck(

@@ -68,7 +68,7 @@ void main() {
     ) async {
       final h = await launch(tester);
 
-      await tester.tap(find.text('Add product'));
+      await tester.tap(find.byTooltip('Add product'));
       await tester.settleApp();
       expect(find.text('New product'), findsOneWidget);
 
@@ -100,7 +100,7 @@ void main() {
       tester,
     ) async {
       final h = await launch(tester);
-      await tester.tap(find.text('Add product'));
+      await tester.tap(find.byTooltip('Add product'));
       await tester.settleApp();
 
       await submit(tester, 'Create product');
@@ -118,7 +118,7 @@ void main() {
       h.backend.failNextMutation = const FakeResponse.json({
         'message': ['images must be valid URLs'],
       }, status: 400);
-      await tester.tap(find.text('Add product'));
+      await tester.tap(find.byTooltip('Add product'));
       await tester.settleApp();
       await fillForm(tester);
 
@@ -226,5 +226,137 @@ void main() {
     await tester.settleApp();
 
     expect(find.text('Welcome back'), findsOneWidget);
+  });
+
+  group('deck', () {
+    Future<void> openDeck(WidgetTester tester) async {
+      await tester.tap(find.text('Deck'));
+      await tester.settleApp();
+    }
+
+    testWidgets('switching to the deck shows the products as cards', (
+      tester,
+    ) async {
+      await launch(tester);
+
+      await openDeck(tester);
+
+      expect(find.text('Fixture Hat'), findsOneWidget);
+      expect(find.text('No likes yet'), findsOneWidget);
+      expect(find.byTooltip('Like'), findsOneWidget);
+
+      await tester.tap(find.text('List'));
+      await tester.settleApp();
+      expect(find.byTooltip('Like'), findsNothing);
+      expect(find.text('Fixture Shoe'), findsOneWidget);
+    });
+
+    testWidgets('liking and skipping advance the deck and count the likes', (
+      tester,
+    ) async {
+      await launch(tester);
+      await openDeck(tester);
+
+      await tester.tap(find.byTooltip('Like'));
+      await tester.settleApp();
+      expect(find.text('1 liked'), findsOneWidget);
+      expect(
+        find.text('Fixture Shoe'),
+        findsOneWidget,
+        reason: 'next card is on top',
+      );
+
+      await tester.tap(find.byTooltip('Skip'));
+      await tester.settleApp();
+      expect(find.text("You've seen everything"), findsOneWidget);
+      expect(
+        find.text('Fixture Shoe'),
+        findsNothing,
+        reason: 'the skipped card is gone',
+      );
+    });
+
+    testWidgets('a real drag gesture throws a card', (tester) async {
+      await launch(tester);
+      await openDeck(tester);
+
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.text('Fixture Hat')),
+      );
+      await gesture.moveBy(const Offset(250, 0));
+      await gesture.up();
+      await tester.settleApp();
+
+      expect(find.text('1 liked'), findsOneWidget);
+    });
+
+    testWidgets('seeing every card offers to start over', (tester) async {
+      await launch(tester);
+      await openDeck(tester);
+
+      await tester.tap(find.byTooltip('Like'));
+      await tester.settleApp();
+      await tester.tap(find.byTooltip('Skip'));
+      await tester.settleApp();
+
+      expect(find.text("You've seen everything"), findsOneWidget);
+      await tester.tap(find.text('Start over'));
+      await tester.settleApp();
+      expect(find.text('Fixture Hat'), findsOneWidget);
+      expect(find.text('1 liked'), findsOneWidget, reason: 'likes are kept');
+    });
+
+    testWidgets(
+      'tapping a card opens the product, and back returns to the deck',
+      (tester) async {
+        await launch(tester);
+        await openDeck(tester);
+
+        await tester.tap(find.text('Fixture Hat'));
+        await tester.settleApp();
+        expect(find.byTooltip('Edit'), findsOneWidget);
+
+        await tester.pageBack();
+        await tester.settleApp();
+        expect(
+          find.byTooltip('Like'),
+          findsOneWidget,
+          reason: 'still in deck mode',
+        );
+      },
+    );
+
+    testWidgets('a product created while in the deck lands on top of it', (
+      tester,
+    ) async {
+      await launch(tester);
+      await openDeck(tester);
+
+      await tester.tap(find.byTooltip('Add product'));
+      await tester.settleApp();
+      await fillForm(tester);
+      await submit(tester, 'Create product');
+
+      expect(find.text('Brand new cap'), findsOneWidget);
+      expect(find.byTooltip('Like'), findsOneWidget);
+    });
+
+    testWidgets('a product deleted from the deck is gone from it', (
+      tester,
+    ) async {
+      await launch(tester);
+      await openDeck(tester);
+
+      await tester.tap(find.text('Fixture Hat'));
+      await tester.settleApp();
+      await tester.tap(find.byTooltip('Delete'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Delete').last);
+      await tester.settleApp();
+
+      expect(find.text('Fixture Hat'), findsNothing);
+      expect(find.text('Fixture Shoe'), findsOneWidget);
+      expect(find.byTooltip('Like'), findsOneWidget);
+    });
   });
 }

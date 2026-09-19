@@ -4,6 +4,9 @@ import 'package:products/src/domain/entities/product.dart';
 
 enum ProductsPhase { loading, ready, failure }
 
+/// How the same products are presented.
+enum ProductsViewMode { list, deck }
+
 class ProductsState extends Equatable {
   const ProductsState({
     this.phase = ProductsPhase.loading,
@@ -14,6 +17,9 @@ class ProductsState extends Equatable {
     this.isLoadingMore = false,
     this.hasReachedEnd = false,
     this.loadMoreFailure,
+    this.viewMode = ProductsViewMode.list,
+    this.likedIds = const {},
+    this.dismissedIds = const {},
   });
 
   final ProductsPhase phase;
@@ -31,6 +37,26 @@ class ProductsState extends Equatable {
   final bool isLoadingMore;
   final bool hasReachedEnd;
   final Failure? loadMoreFailure;
+  final ProductsViewMode viewMode;
+
+  /// Products swiped right in the deck (kept for this session only).
+  final Set<int> likedIds;
+
+  /// Products the user has swiped away in the deck, either way.
+  final Set<int> dismissedIds;
+
+  /// The products still in the deck: loaded and not yet swiped away.
+  List<Product> get deckItems => [
+    for (final product in items)
+      if (!dismissedIds.contains(product.id)) product,
+  ];
+
+  /// Every loaded product has been swiped and there are no more to load.
+  bool get isDeckExhausted =>
+      phase == ProductsPhase.ready &&
+      items.isNotEmpty &&
+      hasReachedEnd &&
+      deckItems.isEmpty;
 
   bool get isInitialLoading => phase == ProductsPhase.loading;
   Failure? get blockingFailure =>
@@ -46,6 +72,9 @@ class ProductsState extends Equatable {
     bool? isLoadingMore,
     bool? hasReachedEnd,
     Object? loadMoreFailure = keep,
+    ProductsViewMode? viewMode,
+    Set<int>? likedIds,
+    Set<int>? dismissedIds,
   }) => ProductsState(
     phase: phase ?? this.phase,
     items: items ?? this.items,
@@ -55,6 +84,9 @@ class ProductsState extends Equatable {
     isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     hasReachedEnd: hasReachedEnd ?? this.hasReachedEnd,
     loadMoreFailure: valueOrKeep(loadMoreFailure, this.loadMoreFailure),
+    viewMode: viewMode ?? this.viewMode,
+    likedIds: likedIds ?? this.likedIds,
+    dismissedIds: dismissedIds ?? this.dismissedIds,
   );
 
   @override
@@ -67,5 +99,8 @@ class ProductsState extends Equatable {
     isLoadingMore,
     hasReachedEnd,
     loadMoreFailure,
+    viewMode,
+    likedIds,
+    dismissedIds,
   ];
 }
