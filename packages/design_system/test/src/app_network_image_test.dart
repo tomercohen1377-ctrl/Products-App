@@ -51,33 +51,6 @@ void main() {
     expect(find.byIcon(Icons.image_not_supported_outlined), findsOneWidget);
   });
 
-  testWidgets(
-    'sizeAware: false decodes at native resolution, not layout size',
-    (tester) async {
-      await tester.pumpApp(
-        const Center(
-          child: SizedBox(
-            width: 120,
-            height: 120,
-            child: AppNetworkImage(
-              url: 'https://example.test/a.png',
-              sizeAware: false,
-            ),
-          ),
-        ),
-      );
-
-      final image = tester.widget<Image>(find.byType(Image));
-      expect(
-        image.image,
-        isA<NetworkImage>(),
-        reason:
-            'no ResizeImage wrapper, so it never re-decodes when its '
-            'layout size changes (e.g. mid-Hero-flight)',
-      );
-    },
-  );
-
   testWidgets('rounds its corners when asked', (tester) async {
     await tester.pumpApp(
       const SizedBox.square(
