@@ -32,9 +32,20 @@ class ProductTile extends StatelessWidget {
             children: [
               SizedBox.square(
                 dimension: DSDimensions.thumbnail,
-                child: AppNetworkImage(
-                  url: product.coverImage,
-                  borderRadius: DSCornerRadius.mAll,
+                child: Hero(
+                  tag: 'product-image-${product.id}',
+                  // Flies through a size-independent image: Hero resizes
+                  // this widget every frame, and AppNetworkImage's normal
+                  // layout-driven cacheWidth would re-decode (and flicker)
+                  // on each of those frames.
+                  flightShuttleBuilder: (_, _, _, _, _) => AppNetworkImage(
+                    url: product.coverImage,
+                    sizeAware: false,
+                  ),
+                  child: AppNetworkImage(
+                    url: product.coverImage,
+                    borderRadius: DSCornerRadius.mAll,
+                  ),
                 ),
               ),
               Expanded(

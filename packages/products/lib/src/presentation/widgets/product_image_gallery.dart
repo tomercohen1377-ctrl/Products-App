@@ -6,9 +6,13 @@ import 'package:products/testing.dart';
 /// A swipeable square gallery with page dots. Falls back to a single
 /// placeholder when there are no images.
 class ProductImageGallery extends StatefulWidget {
-  const ProductImageGallery({required this.images, super.key});
+  const ProductImageGallery({required this.images, this.heroTag, super.key});
 
   final List<String> images;
+
+  /// When set, wraps the cover image (page 0) in a [Hero] with this tag,
+  /// e.g. to fly in from a matching tag in a list tile.
+  final Object? heroTag;
 
   @override
   State<ProductImageGallery> createState() => _ProductImageGalleryState();
@@ -28,8 +32,21 @@ class _ProductImageGalleryState extends State<ProductImageGallery> {
           PageView.builder(
             itemCount: images.isEmpty ? 1 : images.length,
             onPageChanged: (page) => setState(() => _page = page),
-            itemBuilder: (context, index) =>
-                AppNetworkImage(url: images.isEmpty ? null : images[index]),
+            itemBuilder: (context, index) {
+              final url = images.isEmpty ? null : images[index];
+              final image = AppNetworkImage(url: url);
+              final heroTag = widget.heroTag;
+              return index == 0 && heroTag != null
+                  ? Hero(
+                      tag: heroTag,
+                      // See product_tile.dart: avoids re-decode flicker
+                      // during the flight.
+                      flightShuttleBuilder: (_, _, _, _, _) =>
+                          AppNetworkImage(url: url, sizeAware: false),
+                      child: image,
+                    )
+                  : image;
+            },
           ),
           if (images.length > 1)
             PositionedDirectional(

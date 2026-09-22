@@ -52,6 +52,7 @@ class _Body extends StatelessWidget {
           ProductImageGallery(
             key: ValueKey(product.images),
             images: product.images,
+            heroTag: 'product-image-${product.id}',
           ),
           if (isDeleting) const LinearProgressIndicator(),
           Padding(

@@ -37,4 +37,21 @@ void main() {
 
     expect(find.byIcon(Icons.image_not_supported_outlined), findsOneWidget);
   });
+
+  testWidgets('tags the cover image for a shared-element transition when '
+      'given a heroTag', (tester) async {
+    await tester.pumpApp(
+      const ProductImageGallery(images: images, heroTag: 'tag-1'),
+    );
+
+    final hero = tester.widget<Hero>(find.byType(Hero));
+    expect(hero.tag, 'tag-1');
+    expect(hero.flightShuttleBuilder, isNotNull);
+  });
+
+  testWidgets('does not wrap in a Hero without a heroTag', (tester) async {
+    await tester.pumpApp(const ProductImageGallery(images: images));
+
+    expect(find.byType(Hero), findsNothing);
+  });
 }

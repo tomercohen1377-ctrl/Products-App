@@ -22,6 +22,22 @@ void main() {
     expect(taps, 1);
   });
 
+  testWidgets('the thumbnail is tagged for a shared-element transition', (
+    tester,
+  ) async {
+    await tester.pumpApp(const ProductTile(product: productFixture));
+
+    final hero = tester.widget<Hero>(find.byType(Hero));
+    expect(hero.tag, 'product-image-${productFixture.id}');
+    expect(
+      hero.flightShuttleBuilder,
+      isNotNull,
+      reason:
+          'a plain AppNetworkImage would flicker mid-flight as Hero '
+          'resizes it frame to frame',
+    );
+  });
+
   testWidgets('a product without images or category still renders', (
     tester,
   ) async {
