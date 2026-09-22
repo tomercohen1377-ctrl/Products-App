@@ -99,7 +99,9 @@ The API's tokens don't expire during a short demo, so:
 1. Sign in, open the developer tools, tap **Expire access token**, then **Call profile now**. The server really answers 401; the app refreshes and replays; the sheet reports "recovered transparently".
 2. Tap **Kill session** then **Call profile now**: the refresh is rejected and you land on the login screen with "Your session has expired."
 
-Automated: `network/test/src/auth_interceptor_test.dart` (single flight, late 401s, no loops, transient vs definitive), `auth/test/src/session_recovery_test.dart` (the whole stack over a scripted transport), `test/app_auth_flow_test.dart` (through the real app), and `integration_test/live_auth_test.dart` (real API + real keychain, on a simulator). I also broke the single-flight and stale-token logic on purpose to confirm the tests fail.
+**Only `/auth/profile` (and `/auth/login`, `/auth/refresh-token`) actually check the token on this API.** I verified every products endpoint directly with `curl` and a garbage/missing Bearer token: `GET /products`, `GET /products/{id}`, `GET /categories`, `POST /products`, and `DELETE /products/{id}` all still return 2xx with real data. So browsing the list, opening a product, or refreshing after killing the session in dev tools will *not* visibly do anything — there's no 401 for the interceptor to react to, regardless of the client. Use **Call profile now** to see the real behavior; the dev-tools steps above are the reliable demo path.
+
+Automated: `network/test/src/auth_interceptor_test.dart` (single flight, late 401s, no loops, transient vs definitive), `auth/test/src/session_recovery_test.dart` (the whole stack over a scripted transport, with a fake transport that *does* enforce the token consistently), `test/app_auth_flow_test.dart` (through the real app), and `integration_test/live_auth_test.dart` (real API + real keychain, on a simulator). I also broke the single-flight and stale-token logic on purpose to confirm the tests fail.
 
 ## The animation: a physics swipe deck
 

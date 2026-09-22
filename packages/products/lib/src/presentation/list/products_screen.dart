@@ -35,26 +35,28 @@ class ProductsScreen extends StatelessWidget {
         ...actions,
       ],
     ),
-    body: MviView<ProductsBloc, ProductsState, ProductsEffect>(
-      onEffect: (context, effect) => switch (effect) {
-        ProductsRefreshFailed(:final failure) => _showSnackBar(
-          context,
-          failure.localized(context.l10n),
-        ),
-        OpenProductDetail(:final product) => context.push<void>(
-          ProductsRoutes.detail(product.id),
-          extra: product,
-        ),
-        OpenProductForm() => context.push<void>(ProductsRoutes.create),
-      },
-      builder: (context, state) {
-        final bloc = context.read<ProductsBloc>();
-        return ProductsContent(
-          state: state,
-          onIntent: bloc.add,
-          onRefresh: () => _refresh(bloc),
-        );
-      },
+    body: SafeArea(
+      child: MviView<ProductsBloc, ProductsState, ProductsEffect>(
+        onEffect: (context, effect) => switch (effect) {
+          ProductsRefreshFailed(:final failure) => _showSnackBar(
+            context,
+            failure.localized(context.l10n),
+          ),
+          OpenProductDetail(:final product) => context.push<void>(
+            ProductsRoutes.detail(product.id),
+            extra: product,
+          ),
+          OpenProductForm() => context.push<void>(ProductsRoutes.create),
+        },
+        builder: (context, state) {
+          final bloc = context.read<ProductsBloc>();
+          return ProductsContent(
+            state: state,
+            onIntent: bloc.add,
+            onRefresh: () => _refresh(bloc),
+          );
+        },
+      ),
     ),
   );
 

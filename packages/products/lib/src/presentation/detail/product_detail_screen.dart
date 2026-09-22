@@ -25,7 +25,9 @@ class ProductDetailScreen extends StatelessWidget {
             appBar: AppBar(
               actions: [ProductDetailActions(state: state, onIntent: bloc.add)],
             ),
-            body: ProductDetailContent(state: state, onIntent: bloc.add),
+            body: SafeArea(
+              child: ProductDetailContent(state: state, onIntent: bloc.add),
+            ),
           );
         },
       );
